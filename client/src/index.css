@@ -1,0 +1,89 @@
+body {
+  margin: 0;
+}
+
+.d-flex {
+ display: flex;
+}
+
+.navbar {
+  justify-content: center;
+}
+
+.navbar-container {
+  justify-content: space-between;
+  align-items: center;
+  width: 80%;
+}
+
+.navs {
+  text-decoration: none;
+  gap: 20px;
+}
+
+ul.navs{
+  padding-left: 0;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+.currency-dropdown {
+  position: relative;
+  gap: 13px;
+}
+
+.currency-icons {
+  align-items: flex-end;
+  gap: 5px;
+}
+
+.currency {
+  position: absolute;
+  flex-direction: column;
+  gap: 20px;
+}
+
+ul.navs li a{
+  text-decoration: none;
+}
+
+.sym {
+  margin-right: 5px;
+}
+
+.row {
+  width: 100%;
+  gap: 4%;
+  flex-wrap: wrap
+}
+
+.card {
+  width: 30%;
+  justify-content: center;
+  filter: drop-shadow(0 4px 4px rgb(215, 209, 220));
+  background-color: #fff;
+  margin-top: 20px;
+}
+
+.card-container {
+  width: 90%;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: start;
+}
+
+.img-container {
+  width: 100%
+}
+
+.card-name {
+  margin: 3px 0;
+}
+
+.card-name:last-child{
+  margin-bottom: 10px;
+}
+
