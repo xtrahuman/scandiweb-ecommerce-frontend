@@ -1,0 +1,26 @@
+{
+  "name": "junior-test-endpoint",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/main.ts",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/main.js",
+    "client": "npm start --prefix client",
+    "dev": "concurrently \"tsc -w\" \"nodemon dist/main.js\" \"npm run client\""
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "apollo-server": "^2.23.0",
+    "graphql": "^15.8.0",
+    "typescript": "^4.2.4",
+    "wait": "^0.4.2",
+    "yarn": "^1.22.17"
+  },
+  "devDependencies": {
+    "concurrently": "^6.0.2",
+    "nodemon": "^2.0.7"
+  }
+}
