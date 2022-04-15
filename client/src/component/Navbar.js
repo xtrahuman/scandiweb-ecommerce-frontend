@@ -13,20 +13,25 @@ constructor(props){
   }
 
   this.toggleDropdown = this.toggleDropdown.bind(this)
+  this.selectSymbol = this.selectSymbol.bind(this)
 }
 
  toggleDropdown = () => this.setState(({dropDisplay}) => ({ 
   dropDisplay: !dropDisplay
 }))
-
+ 
+ selectSymbol = (symbol) => {
+  this.setState((prevState)=>({ dropDisplay: !prevState.dropDisplay,currency: symbol}))
+  const {getSymbol} = this.props
+  getSymbol(symbol)
+ }
+ 
 render (){
   const { dropDisplay, currency } = this.state
   const { data, getNavName } = this.props
-  console.log(dropDisplay)
-
     return (
     <nav className="navbar d-flex">
-    <div className="d-flex navbar-container">
+    <div className="d-flex navbar-container container">
     <ul className='d-flex navs'>
     {data.categories.map(({ name }) => (
     <li key={name}>
@@ -42,8 +47,9 @@ render (){
       <span >{ currency }</span>
       <span ><FaAngleDown style={{width: '10px', height: '10px'}}/></span>
       </div>
-     <ul className="d-flex currency" style= {{ display: dropDisplay ?  'flex' : 'none'}}>{data.currencies.map(({label, symbol}) => <li key={label} onClick = {()=>this.setState(({dropDisplay})=>({ dropDisplay: !dropDisplay,currency: symbol}))}><span className='sym'>{symbol}</span>{label}</li>)}</ul>
-     <img src={cartLogo} alt = 'cart' />
+     <ul className="d-flex currency" style= {{ display: dropDisplay ?  'flex' : 'none'}}>{data.currencies.map(({label, symbol}) => 
+     <li key={label} onClick = {()=>this.selectSymbol(symbol)}><span className='sym'>{symbol}</span>{label}</li>)}</ul>
+     <img src={cartLogo} style={{cursor:'pointer'}} alt = 'cart' />
      </div>
      </div>
     </nav>

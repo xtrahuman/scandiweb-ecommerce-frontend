@@ -14,7 +14,14 @@ const ALL_QUERY = gql`
       id,
       name,
       inStock,
-      gallery
+      gallery,
+      prices{
+        currency{
+         symbol,
+         label
+       },
+         amount
+       }
     }
   }
 
@@ -28,15 +35,17 @@ class App extends React.Component {
   constructor(){
     super()
     this.state = {
-      NavName: 'all'
+      NavName: 'all',
+      symbol: '$'
     }
     this.getNavName = this.getNavName.bind(this)
   }
 
-  getNavName = (name) => this.setState({NavName: name})
+  getNavName = (name) => this.setState({...this.state, NavName: name})
+  getSymbol = (symbol) => this.setState({...this.state, symbol: symbol})
 
  render () {
-  const {NavName} = this.state
+  const {NavName, symbol} = this.state
   return (
     <Query query={ALL_QUERY}>
     {({ loading, error, data }) => {
@@ -45,12 +54,11 @@ class App extends React.Component {
 
   return (
     <div className="App">
-     <Navbar data = {data} getNavName={this.getNavName} />
-     <h1>App</h1>
+     <Navbar data = {data} getNavName={this.getNavName} getSymbol={this.getSymbol} />
      <Routes>
-      <Route path="/" element={<Category data={data} categoryName={NavName}/>} />
-      <Route path="/clothes" element={<Category data={data} categoryName={NavName}/>} />
-      <Route path="/tech" element={<Category data={data} categoryName={NavName}/>} />
+      <Route path="/" element={<Category data={data} categoryName={NavName} symbol={symbol}/>} />
+      <Route path="/clothes" element={<Category data={data} categoryName={NavName} symbol={symbol}/>} />
+      <Route path="/tech" element={<Category data={data} categoryName={NavName} symbol={symbol}/>} />
      </Routes>
     </div>
   )
