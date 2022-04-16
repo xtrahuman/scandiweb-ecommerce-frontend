@@ -1,6 +1,7 @@
 import React from 'react';
 import {increment, decrement}  from '../redux/actions'
 import { connect } from "react-redux";
+import { Outlet } from 'react-router-dom';
 
 class Category extends React.Component {
 
@@ -8,6 +9,7 @@ class Category extends React.Component {
        const {data, categoryName, symbol, counter, decrement, increment} = this.props
        const currentCategory = data.categories.filter(({name}) => name === categoryName)
         return (
+            <>
             <div className='d-flex justify-content-c'>
             {currentCategory.map(({name, products}) => (
             <div className= 'container d-flex category-container'key={name}>
@@ -32,6 +34,7 @@ class Category extends React.Component {
             </div>
             ))}
             </div>
+            </>
         )
     }
 }

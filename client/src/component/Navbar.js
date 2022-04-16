@@ -35,7 +35,7 @@ render (){
     <ul className='d-flex navs'>
     {data.categories.map(({ name }) => (
     <li key={name}>
-      <NavLink to = {name === 'all' ? '/' : `/${name}`} onClick={()=> getNavName(name)}>
+      <NavLink to = {`/${name}`} onClick={()=> getNavName(name)}>
         {name}
       </NavLink>
     </li>

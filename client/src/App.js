@@ -1,6 +1,7 @@
 import React from 'react';
 import Navbar from './component/Navbar';
 import Category from './component/category'
+import Details from './component/details';
 import { Route, Routes } from 'react-router-dom';
 import {Query} from '@apollo/client/react/components'
 import {gql} from "@apollo/client";
@@ -57,8 +58,12 @@ class App extends React.Component {
      <Navbar data = {data} getNavName={this.getNavName} getSymbol={this.getSymbol} />
      <Routes>
       <Route path="/" element={<Category data={data} categoryName={NavName} symbol={symbol}/>} />
-      <Route path="/clothes" element={<Category data={data} categoryName={NavName} symbol={symbol}/>} />
-      <Route path="/tech" element={<Category data={data} categoryName={NavName} symbol={symbol}/>} />
+      {data.categories.map(({name}) => 
+      <>
+      <Route path={`/${name}`} element={<Category data={data} categoryName={NavName} symbol={symbol}/>} /> 
+      <Route path={`/${name}/:id`}element={<Details data={data} id={data.categories.products} symbol={symbol}/>}/>
+      </>
+    )}
      </Routes>
     </div>
   )
