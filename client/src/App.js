@@ -59,12 +59,12 @@ class App extends React.Component {
      <Routes>
       <Route path="/" element={<Category data={data} categoryName={NavName} symbol={symbol}/>} />
       {data.categories.map(({name}) => 
-      <>
-      <Route path={`/${name}`} element={<Category data={data} categoryName={NavName} symbol={symbol}/>} /> 
-      <Route path={`/${name}/:id`}element={<Details data={data} id={data.categories.products} symbol={symbol}/>}/>
-      </>
+      <Route key={name}>
+      <Route path={`/${name}`}  element={<Category data={data} categoryName={NavName} symbol={symbol}/>} /> 
+      <Route path={`/${name}/:id`} element={<Details data={data} categoryName={NavName} symbol={symbol}/>}/>
+      </Route>
     )}
-     </Routes>
+       </Routes>
     </div>
   )
 }}

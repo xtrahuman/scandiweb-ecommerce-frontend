@@ -1,7 +1,7 @@
 import React from 'react';
 import {increment, decrement}  from '../redux/actions'
 import { connect } from "react-redux";
-import { Outlet } from 'react-router-dom';
+import { Link } from 'react-router-dom'
 
 class Category extends React.Component {
 
@@ -22,7 +22,7 @@ class Category extends React.Component {
              <div className='d-flex card' key={id}>
              <div className='d-flex card-container'>
              <div className='img-container'><img src={gallery[0]} style={{width: '100%', height: '350px', objectFit:'contain'}} alt={id}/></div>
-             <p className='card-name'>{name}</p>
+             <Link to={`/${currentCategory[0].name}/${id}`}><p className='card-name'>{name}</p></Link>
             {prices.filter(({currency}) => currency.symbol === symbol)
             .map(({currency,amount}) => 
             <p className='card-name' key={currency.symbol}>{`${currency.symbol} ${amount}`}</p>

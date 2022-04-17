@@ -6,6 +6,10 @@ body {
  display: flex;
 }
 
+.flex-direction-row {
+  flex-direction: column;
+}
+
 .navbar {
   justify-content: center;
 }
@@ -118,5 +122,9 @@ ul.navs li a{
 
 .card-name:last-child{
   margin-bottom: 10px;
+}
+
+.all-image {
+  gap: 30px
 }
 
