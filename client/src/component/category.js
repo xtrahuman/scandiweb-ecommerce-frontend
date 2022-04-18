@@ -39,6 +39,7 @@ class Category extends React.Component {
     }
 }
 
+
 const actionCreators = {
     increment,
     decrement,

@@ -42,7 +42,11 @@ class App extends React.Component {
     this.getNavName = this.getNavName.bind(this)
   }
 
-  getNavName = (name) => this.setState({...this.state, NavName: name})
+  getNavName = (name) => {
+    this.setState({...this.state, NavName: name})
+    localStorage.removeItem('current_cart')
+  }
+   
   getSymbol = (symbol) => this.setState({...this.state, symbol: symbol})
 
  render () {

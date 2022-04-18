@@ -6,7 +6,7 @@ body {
  display: flex;
 }
 
-.flex-direction-row {
+.flex-direction-column {
   flex-direction: column;
 }
 
@@ -125,6 +125,10 @@ ul.navs li a{
 }
 
 .all-image {
-  gap: 30px
+  gap: 30px;
+}
+
+.details-container {
+  gap: 30px;
 }
 
