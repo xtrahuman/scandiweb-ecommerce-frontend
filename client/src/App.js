@@ -6,8 +6,16 @@ import { Route, Routes } from 'react-router-dom';
 import {Query} from '@apollo/client/react/components'
 import {gql} from "@apollo/client";
 
+class App extends React.Component {
+  constructor(){
+    super()
+    this.nav = JSON.parse(localStorage.getItem('current_category'))
+    this.state = {
+      NavName: this.nav ? this.nav : 'all',
+      symbol: '$'
+    }
 
-const ALL_QUERY = gql`
+    this.ALL_QUERY = gql`
   query AllQuery{
     categories{
     name,
@@ -32,13 +40,6 @@ const ALL_QUERY = gql`
   }
 }
 `
-class App extends React.Component {
-  constructor(){
-    super()
-    this.state = {
-      NavName: 'all',
-      symbol: '$'
-    }
     this.getNavName = this.getNavName.bind(this)
   }
 
@@ -52,7 +53,7 @@ class App extends React.Component {
  render () {
   const {NavName, symbol} = this.state
   return (
-    <Query query={ALL_QUERY}>
+    <Query query={this.ALL_QUERY}>
     {({ loading, error, data }) => {
         if (error) return <h1>Error...</h1>;
         if (loading || !data) return <h1>Loading...</h1>
@@ -61,11 +62,11 @@ class App extends React.Component {
     <div className="App">
      <Navbar data = {data} getNavName={this.getNavName} getSymbol={this.getSymbol} />
      <Routes>
-      <Route path="/" element={<Category data={data} categoryName={NavName} symbol={symbol}/>} />
+      <Route path="/" element={<Category categoryName={NavName} symbol={symbol}/>} />
       {data.categories.map(({name}) => 
       <Route key={name}>
-      <Route path={`/${name}`}  element={<Category data={data} categoryName={NavName} symbol={symbol}/>} /> 
-      <Route path={`/${name}/:id`} element={<Details data={data} categoryName={NavName} symbol={symbol}/>}/>
+      <Route path={`/${name}`}  element={<Category categoryName={NavName} symbol={symbol}/>} /> 
+      <Route path={`/${name}/:id`} element={<Details superData={data} categoryName={NavName} symbol={symbol}/>}/>
       </Route>
     )}
        </Routes>
