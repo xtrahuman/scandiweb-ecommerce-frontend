@@ -16,6 +16,8 @@ query ProductQuery{
         name,
         inStock,
         gallery,
+        description,
+        category
         prices{
          currency{
           symbol,

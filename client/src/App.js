@@ -69,6 +69,7 @@ class App extends React.Component {
       <Route path={`/${name}/:id`} element={<Details superData={data} categoryName={NavName} symbol={symbol}/>}/>
       </Route>
     )}
+      <Route path={`/cart`} element={<Cart/>}/>
        </Routes>
     </div>
   )

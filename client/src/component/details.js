@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import {
     useLocation,
     useNavigate,
@@ -16,6 +17,13 @@ class Details extends React.Component {
         super(props)
         this.getDetails = this.getDetails.bind(this)
         this.id = this.props.router.params.id
+        this.state = {
+            selectedSwatch: false,
+            selectedNotSwatch: false,
+        }
+        this.myRef = React.createRef();
+        this.selectSwatch = this.selectSwatch.bind(this)
+        this.selectNotSwatch = this.selectNotSwatch.bind(this)
       }
 
       componentDidMount () {
@@ -30,6 +38,48 @@ class Details extends React.Component {
         selectImage({image: gallery[0]})
       }
 
+      selectSwatch = (event) =>{
+        this.setState(({selectedSwatch}) => ({ 
+        selectedSwatch: !selectedSwatch
+      }))
+       const selected = event.currentTarget
+    const allSwatch = document.querySelectorAll('.swatch-container')
+    allSwatch.forEach((i) =>  
+    i.classList.forEach((x)=> {
+        if(x==='active-swatch'){
+           i.classList.remove('active-swatch')
+        }
+    }
+    ))
+          selected.classList.add('active-swatch')
+          console.log(this.myRef.current)
+    }
+
+      selectNotSwatch = (event) => {this.setState(({selectedNotSwatch}) => ({ 
+        selectedNotSwatch: !selectedNotSwatch
+      }))
+      const selected = event.currentTarget;
+      const classProp = '.not-swatch'
+      const switchClass = 'Active-not-swatch'
+      this.switchHandler(selected,classProp,switchClass)
+    }
+
+      switchHandler = (selected, classProp, switchClass) => {
+        this.setState(({selectedSwatch}) => ({ 
+            selectedSwatch: !selectedSwatch
+          }))
+        const allAttribute = document.querySelectorAll(classProp)
+        allAttribute.forEach((attrib) =>  
+        attrib.classList.forEach((atrributeClass)=> {
+            if(atrributeClass===switchClass){
+                attrib.classList.remove(switchClass)
+            }
+        }
+        ))
+              selected.classList.add(switchClass)
+              console.log(selected.textContent)
+      }
+
       getDetails = (imageUrl) => {
         const { selectImage } = this.props
         selectImage({image: imageUrl})
@@ -37,10 +87,8 @@ class Details extends React.Component {
 
     render () {
         const { PRODUCT_QUERY, fetchProduct, cartReducer, selectImage, symbol} = this.props
-        console.log(cartReducer)
         const idParam = this.props.router.params.id;
         fetchProduct(idParam)
-
         return (
             <Query query={PRODUCT_QUERY}>
          {({ loading, error, data }) => {
@@ -48,12 +96,15 @@ class Details extends React.Component {
              if (loading || !data) return <h1>Loading...</h1>
          console.log(data)
          const {product} = data
-         const {id, name, gallery, prices, attributes} = product
+         const {id, name, gallery, prices, attributes } = product
+         const element = product?.description;
+        //  const descriptionBody = document.getElementById('descriptionBody')
+        //  descriptionBody?.appendChild(element);
         if(cartReducer === null) {
             selectImage({image: gallery[0]})
         }
         return(
-            <div className='d-flex justify-content-c'>
+            <div className='d-flex justify-content-c details-main'>
                 <div className= 'container d-flex details-container'>
                     <div className='d-flex flex-direction-column all-image'>
                         {gallery.map((pictureUrl) => 
@@ -62,22 +113,43 @@ class Details extends React.Component {
                         </div>
                         )}
                     </div>
-                    <div><img alt={name} src={`${cartReducer? cartReducer.image : gallery[0] }`} style={{width:'50%', height:'auto'}}/></div>
-                  <div style={{width:'50%', height:'auto'}}>
+                    <div className="details-image-main"><img alt={name} src={`${cartReducer? cartReducer.image : gallery[0] }`} style={{width:'100%', height:'auto'}}/></div>
+                  <div className='details-contents' style={{}}>
                   <p>{name}</p>
                   {attributes.map(({id, name,type,items}) => 
                     <div key={id}>
                         <p>{`${name} :`}</p>
+                        <div  ref = {this.myRef} className="d-flex details-attributes">
                         {
                         items.map(({id, displayValue}) =>
-                            <div key={id}>
-                                <p style={{backgroundColor: type === 'swatch'? displayValue : 'black', color:' white',width:'50px', height:'40px'}}>{type === 'swatch' ? '' : displayValue}</p>
+                            <div  key={id}>
+                                {
+                                type === 'swatch' ? 
+                                <div data-id={displayValue} onClick={(e)=>this.selectSwatch(e)} className='swatch-container'>
+                                <div  className ='swatch'  style={{backgroundColor: displayValue }}></div> 
+                                </div>
+                                :
+                                <div onClick={(e)=>this.selectNotSwatch(e)}  className =' d-flex not-swatch'> 
+                                <p>{displayValue}</p> 
+                                </div>
+                                }
                             </div>
                         )}
+                        </div>
                     </div>
                   )}
-                  
+                  <div>
+                   <p>prices :</p>   
+                  {prices.filter(({currency}) => currency.symbol === symbol)
+                         .map(({currency,amount}) => 
+                     <p className='details-amount' key={currency.symbol}>{`${currency.symbol} ${amount}`}</p>
+                     )}
                   </div>
+                  <div className='button-contain'>
+                      <button className='details-button' type='button'>ADD TO CART</button>
+                  </div>
+                   <div className = "descriptionBody" dangerouslySetInnerHTML={ {__html: element } }></div>
+                </div>
                 </div>
             </div>
         )
