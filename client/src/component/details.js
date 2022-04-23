@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { Link } from 'react-router-dom';
 import {
     useLocation,
     useNavigate,
@@ -17,11 +17,13 @@ class Details extends React.Component {
         super(props)
         this.getDetails = this.getDetails.bind(this)
         this.id = this.props.router.params.id
+        this.test = ''
         this.state = {
             selectedSwatch: false,
             selectedNotSwatch: false,
         }
         this.myRef = React.createRef();
+        this.mount = false
         this.selectSwatch = this.selectSwatch.bind(this)
         this.selectNotSwatch = this.selectNotSwatch.bind(this)
       }
@@ -36,48 +38,40 @@ class Details extends React.Component {
         const productDetails = products.filter(({id}) => id === idParam)
         const {gallery} = productDetails[0]
         selectImage({image: gallery[0]})
+        this.mount = true
+        if(this.mount){
+            console.log('mounted')
+        }
       }
 
-      selectSwatch = (event) =>{
-        this.setState(({selectedSwatch}) => ({ 
-        selectedSwatch: !selectedSwatch
-      }))
-       const selected = event.currentTarget
-    const allSwatch = document.querySelectorAll('.swatch-container')
-    allSwatch.forEach((i) =>  
-    i.classList.forEach((x)=> {
-        if(x==='active-swatch'){
-           i.classList.remove('active-swatch')
-        }
-    }
-    ))
-          selected.classList.add('active-swatch')
-          console.log(this.myRef.current)
-    }
-
-      selectNotSwatch = (event) => {this.setState(({selectedNotSwatch}) => ({ 
-        selectedNotSwatch: !selectedNotSwatch
-      }))
-      const selected = event.currentTarget;
-      const classProp = '.not-swatch'
-      const switchClass = 'Active-not-swatch'
-      this.switchHandler(selected,classProp,switchClass)
-    }
-
-      switchHandler = (selected, classProp, switchClass) => {
-        this.setState(({selectedSwatch}) => ({ 
-            selectedSwatch: !selectedSwatch
+      selectSwatch = (event, name) =>{
+        this.setState(({selectedNotSwatch}) => ({ 
+            selectedNotSwatch: !selectedNotSwatch
           }))
-        const allAttribute = document.querySelectorAll(classProp)
-        allAttribute.forEach((attrib) =>  
-        attrib.classList.forEach((atrributeClass)=> {
-            if(atrributeClass===switchClass){
-                attrib.classList.remove(switchClass)
-            }
-        }
-        ))
+          const selected = event.currentTarget;
+          const switchClass = 'active-swatch'
+          this.switchHandler(selected,switchClass, name)
+    }
+
+      selectNotSwatch = (event, name ) => {
+        this.setState(({selectedNotSwatch}) => ({ 
+            selectedNotSwatch: !selectedNotSwatch
+          }))
+      const selected = event.currentTarget;
+      const switchClass = 'Active-not-swatch'
+      this.switchHandler(selected,switchClass, name)
+    }
+
+      switchHandler = (selected, switchClass, testremoval) => {
+        const parentElement= document.querySelectorAll(`.${testremoval.split(' ').join('')}`)
+        parentElement.forEach((element) =>{
+                element.classList.forEach((classes) => {
+                        if(classes === switchClass ){
+                            element.classList.remove(switchClass)
+                        }
+                    }) 
+        })
               selected.classList.add(switchClass)
-              console.log(selected.textContent)
       }
 
       getDetails = (imageUrl) => {
@@ -85,9 +79,12 @@ class Details extends React.Component {
         selectImage({image: imageUrl})
       }
 
+      nitialFocus
+
     render () {
         const { PRODUCT_QUERY, fetchProduct, cartReducer, selectImage, symbol} = this.props
         const idParam = this.props.router.params.id;
+        console.log('rendered')
         fetchProduct(idParam)
         return (
             <Query query={PRODUCT_QUERY}>
@@ -98,8 +95,6 @@ class Details extends React.Component {
          const {product} = data
          const {id, name, gallery, prices, attributes } = product
          const element = product?.description;
-        //  const descriptionBody = document.getElementById('descriptionBody')
-        //  descriptionBody?.appendChild(element);
         if(cartReducer === null) {
             selectImage({image: gallery[0]})
         }
@@ -117,20 +112,24 @@ class Details extends React.Component {
                   <div className='details-contents' style={{}}>
                   <p>{name}</p>
                   {attributes.map(({id, name,type,items}) => 
-                    <div key={id}>
+                    <div ref={this.myRef} key={id}>
                         <p>{`${name} :`}</p>
-                        <div  ref = {this.myRef} className="d-flex details-attributes">
+                        <div className="d-flex details-attributes">
                         {
-                        items.map(({id, displayValue}) =>
-                            <div  key={id}>
+                        items.map(({id, displayValue}) => 
+                            <div key={id}>
                                 {
-                                type === 'swatch' ? 
-                                <div data-id={displayValue} onClick={(e)=>this.selectSwatch(e)} className='swatch-container'>
+                                type === 'swatch' ?
+                                <div >
+                                <div data-id={displayValue} onClick={(e)=>this.selectSwatch(e, name)} className={`swatch-container ${name.split(' ').join('')}`}>
                                 <div  className ='swatch'  style={{backgroundColor: displayValue }}></div> 
                                 </div>
+                                </div> 
                                 :
-                                <div onClick={(e)=>this.selectNotSwatch(e)}  className =' d-flex not-swatch'> 
+                                <div >
+                                <div id={name} onClick={(e)=>this.selectNotSwatch(e, name)}  className ={`d-flex not-swatch ${name.split(' ').join('')}`}> 
                                 <p>{displayValue}</p> 
+                                </div>
                                 </div>
                                 }
                             </div>
@@ -146,11 +145,16 @@ class Details extends React.Component {
                      )}
                   </div>
                   <div className='button-contain'>
-                      <button className='details-button' type='button'>ADD TO CART</button>
+                      <Link to="/cart"><button className='details-button' type='button'>ADD TO CART</button></Link>
                   </div>
                    <div className = "descriptionBody" dangerouslySetInnerHTML={ {__html: element } }></div>
                 </div>
                 </div>
+                {type==='swatch'?
+                document.querySelectorAll(`.${name.split(' ').join('')}`)[0].classList.add('act')
+                :
+                document.querySelectorAll(`.${name.split(' ').join('')}`)[0].classList.add('act')
+                }
             </div>
         )
     }}

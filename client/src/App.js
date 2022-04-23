@@ -2,6 +2,7 @@ import React from 'react';
 import Navbar from './component/Navbar';
 import Category from './component/category'
 import Details from './component/details';
+import Cart from './component/cart';
 import { Route, Routes } from 'react-router-dom';
 import {Query} from '@apollo/client/react/components'
 import {gql} from "@apollo/client";
