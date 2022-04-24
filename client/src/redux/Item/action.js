@@ -1,5 +1,5 @@
-export const ADDATTRIBUTES = 'CART/ITEM/ADD'
-export const GETPRODUCT = 'CART/ITEM/GET'
+export const ADDATTRIBUTES = 'ITEM/ATTRIBUTES/ADD'
+export const GETPRODUCT = 'ITEM/ATTRIBUTES/GET'
 
  const addAttrib = (payload) => 
       ({

@@ -7,7 +7,7 @@ import {
   } from "react-router-dom";
 import cartReducer, { selectImage } from '../redux/currentImage/currentImage'
 import { fetchProduct } from '../redux/details/action';
-import addAttrib, {getProduct} from '../redux/cartItems/action';
+import addAttrib, {getProduct} from '../redux/Item/action';
 import {Query} from '@apollo/client/react/components'
 import { connect } from "react-redux";
 
@@ -39,8 +39,8 @@ class Details extends React.Component {
         const { products } = currentCategory[0]
         console.log(products) 
         const productDetails = products.filter(({id}) => id === idParam)
-        const {gallery, name} = productDetails[0]
-        const obj = {name: name, count: 0}
+        const {gallery, name } = productDetails[0]
+        const obj = {name: name, count: 0 }
         getProduct(obj)
         console.log(myItem)
         selectImage({image: gallery[0]})
