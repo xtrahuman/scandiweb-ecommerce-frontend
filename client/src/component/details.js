@@ -17,13 +17,15 @@ class Details extends React.Component {
         super(props)
         this.getDetails = this.getDetails.bind(this)
         this.id = this.props.router.params.id
-        this.test = ''
         this.state = {
             selectedSwatch: false,
             selectedNotSwatch: false,
+            mounted: false
         }
-        this.myRef = React.createRef();
-        this.mount = false
+        this.myRef = React.createRef(null);
+        this.multiRef = React.createRef([]);
+        this.multiRef.current = []
+
         this.selectSwatch = this.selectSwatch.bind(this)
         this.selectNotSwatch = this.selectNotSwatch.bind(this)
       }
@@ -38,10 +40,19 @@ class Details extends React.Component {
         const productDetails = products.filter(({id}) => id === idParam)
         const {gallery} = productDetails[0]
         selectImage({image: gallery[0]})
-        this.mount = true
-        if(this.mount){
-            console.log('mounted')
+         this.clearInterval = setTimeout(()=>{
+          this.initialAttributesStyle()
+           },1500)  
+          
+           this.MuiltRefFunc = (el) => {
+            if(el && !this.multiRef.current.includes(el)){
+                this.multiRef.current.push(el)
+            }
         }
+      }
+
+      componentWillUnmount() {
+        clearInterval(this.clearInterval);
       }
 
       selectSwatch = (event, name) =>{
@@ -79,12 +90,18 @@ class Details extends React.Component {
         selectImage({image: imageUrl})
       }
 
-      nitialFocus
+      initialAttributesStyle = () => {
+        const firstNotSwatch = document.querySelectorAll(".not-swatch")[0]
+        const firstSwatch= document.querySelectorAll(".swatch-container")[0]
+        firstNotSwatch?.classList.add('Active-not-swatch')
+        firstSwatch?.classList.add('active-swatch')
+        console.log(this.atrrClass)
+      }
 
     render () {
         const { PRODUCT_QUERY, fetchProduct, cartReducer, selectImage, symbol} = this.props
         const idParam = this.props.router.params.id;
-        console.log('rendered')
+        
         fetchProduct(idParam)
         return (
             <Query query={PRODUCT_QUERY}>
@@ -112,7 +129,7 @@ class Details extends React.Component {
                   <div className='details-contents' style={{}}>
                   <p>{name}</p>
                   {attributes.map(({id, name,type,items}) => 
-                    <div ref={this.myRef} key={id}>
+                    <div key={id}>
                         <p>{`${name} :`}</p>
                         <div className="d-flex details-attributes">
                         {
@@ -120,14 +137,14 @@ class Details extends React.Component {
                             <div key={id}>
                                 {
                                 type === 'swatch' ?
-                                <div >
-                                <div data-id={displayValue} onClick={(e)=>this.selectSwatch(e, name)} className={`swatch-container ${name.split(' ').join('')}`}>
+                                <div>
+                                <div ref={this.MuiltRefFunc} data-id={displayValue} onClick={(e)=>this.selectSwatch(e, name)} className={`swatch-container ${name.split(' ').join('')}`}>
                                 <div  className ='swatch'  style={{backgroundColor: displayValue }}></div> 
                                 </div>
                                 </div> 
                                 :
-                                <div >
-                                <div id={name} onClick={(e)=>this.selectNotSwatch(e, name)}  className ={`d-flex not-swatch ${name.split(' ').join('')}`}> 
+                                <div>
+                                <div ref={this.MuiltRefFunc} id={name} onClick={(e)=>this.selectNotSwatch(e, name)}  className ={`d-flex not-swatch ${name.split(' ').join('')}`}> 
                                 <p>{displayValue}</p> 
                                 </div>
                                 </div>
@@ -150,11 +167,6 @@ class Details extends React.Component {
                    <div className = "descriptionBody" dangerouslySetInnerHTML={ {__html: element } }></div>
                 </div>
                 </div>
-                {type==='swatch'?
-                document.querySelectorAll(`.${name.split(' ').join('')}`)[0].classList.add('act')
-                :
-                document.querySelectorAll(`.${name.split(' ').join('')}`)[0].classList.add('act')
-                }
             </div>
         )
     }}
