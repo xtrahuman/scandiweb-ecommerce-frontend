@@ -7,6 +7,7 @@ import {
   } from "react-router-dom";
 import cartReducer, { selectImage } from '../redux/currentImage/currentImage'
 import { fetchProduct } from '../redux/details/action';
+import addAttrib, {getProduct} from '../redux/cartItems/action';
 import {Query} from '@apollo/client/react/components'
 import { connect } from "react-redux";
 
@@ -31,18 +32,21 @@ class Details extends React.Component {
       }
 
       componentDidMount () {
-        const {superData, categoryName, selectImage} = this.props
+        const {superData, categoryName, selectImage, getProduct, addAttrib, myItem} = this.props
         const idParam = this.props.router.params.id;
         fetchProduct(idParam);
         const currentCategory = superData.categories.filter(({name}) => name === categoryName)
         const { products } = currentCategory[0]
         console.log(products) 
         const productDetails = products.filter(({id}) => id === idParam)
-        const {gallery} = productDetails[0]
+        const {gallery, name} = productDetails[0]
+        const obj = {name: name, count: 0}
+        getProduct(obj)
+        console.log(myItem)
         selectImage({image: gallery[0]})
          this.clearInterval = setTimeout(()=>{
-          this.initialAttributesStyle()
-           },1500)  
+          this.initialAttributesStyle(addAttrib)
+           },1300)  
           
            this.MuiltRefFunc = (el) => {
             if(el && !this.multiRef.current.includes(el)){
@@ -55,26 +59,28 @@ class Details extends React.Component {
         clearInterval(this.clearInterval);
       }
 
-      selectSwatch = (event, name) =>{
+      selectSwatch = (event, name, displayValue) =>{
         this.setState(({selectedNotSwatch}) => ({ 
             selectedNotSwatch: !selectedNotSwatch
           }))
           const selected = event.currentTarget;
           const switchClass = 'active-swatch'
-          this.switchHandler(selected,switchClass, name)
+          this.switchHandler(selected,switchClass, name, displayValue)
     }
 
-      selectNotSwatch = (event, name ) => {
+      selectNotSwatch = (event, name, displayValue ) => {
         this.setState(({selectedNotSwatch}) => ({ 
             selectedNotSwatch: !selectedNotSwatch
           }))
       const selected = event.currentTarget;
       const switchClass = 'Active-not-swatch'
-      this.switchHandler(selected,switchClass, name)
+      this.switchHandler(selected,switchClass, name, displayValue)
     }
 
-      switchHandler = (selected, switchClass, testremoval) => {
-        const parentElement= document.querySelectorAll(`.${testremoval.split(' ').join('')}`)
+      switchHandler = (selected, switchClass, attrib, value) => {
+        const { addAttrib } = this.props
+        const attribName = attrib.split(' ').join('')
+        const parentElement= document.querySelectorAll(`.${attribName}`)
         parentElement.forEach((element) =>{
                 element.classList.forEach((classes) => {
                         if(classes === switchClass ){
@@ -82,6 +88,10 @@ class Details extends React.Component {
                         }
                     }) 
         })
+        let obj = {}
+        obj[attribName] = value;
+        addAttrib(obj)
+        // this.setState((prev) =>({...prev, ...obj}))
               selected.classList.add(switchClass)
       }
 
@@ -90,18 +100,35 @@ class Details extends React.Component {
         selectImage({image: imageUrl})
       }
 
-      initialAttributesStyle = () => {
-        const firstNotSwatch = document.querySelectorAll(".not-swatch")[0]
-        const firstSwatch= document.querySelectorAll(".swatch-container")[0]
-        firstNotSwatch?.classList.add('Active-not-swatch')
-        firstSwatch?.classList.add('active-swatch')
-        console.log(this.atrrClass)
+      initialAttributesStyle = (addAttrib) => {
+        // const firstNotSwatch = document.querySelectorAll(".not-swatch")[0]
+        // const firstSwatch= document.querySelectorAll(".swatch-container")[0]
+        // firstNotSwatch?.classList.add('Active-not-swatch')
+        // firstSwatch?.classList.add('active-swatch')
+        this.attribClass?.forEach(({name}) => {
+          const attribName = name.split(' ').join('')
+          const getAtribEl = document.querySelectorAll(`.${attribName}`)[0]
+          let value = getAtribEl.dataset.id
+          getAtribEl.classList.forEach((classl) =>
+           classl === "not-swatch" ? getAtribEl.classList.add('Active-not-swatch') : getAtribEl.classList.add('active-swatch')
+          )
+
+        let obj = {}
+        obj[attribName] = value;
+        addAttrib(obj);
+          
+        })
+      }
+
+      componentDidUpdate () {
+        const { myItem } = this.props
+        console.log( myItem )
       }
 
     render () {
-        const { PRODUCT_QUERY, fetchProduct, cartReducer, selectImage, symbol} = this.props
+        const { PRODUCT_QUERY,myItem , fetchProduct, cartReducer, selectImage, symbol} = this.props
         const idParam = this.props.router.params.id;
-        
+        console.log(myItem)
         fetchProduct(idParam)
         return (
             <Query query={PRODUCT_QUERY}>
@@ -112,6 +139,7 @@ class Details extends React.Component {
          const {product} = data
          const {id, name, gallery, prices, attributes } = product
          const element = product?.description;
+         this.attribClass = attributes
         if(cartReducer === null) {
             selectImage({image: gallery[0]})
         }
@@ -138,13 +166,13 @@ class Details extends React.Component {
                                 {
                                 type === 'swatch' ?
                                 <div>
-                                <div ref={this.MuiltRefFunc} data-id={displayValue} onClick={(e)=>this.selectSwatch(e, name)} className={`swatch-container ${name.split(' ').join('')}`}>
+                                <div ref={this.MuiltRefFunc} data-id={displayValue} onClick={(e)=>this.selectSwatch(e, name, displayValue)} className={`swatch-container ${name.split(' ').join('')}`}>
                                 <div  className ='swatch'  style={{backgroundColor: displayValue }}></div> 
                                 </div>
                                 </div> 
                                 :
                                 <div>
-                                <div ref={this.MuiltRefFunc} id={name} onClick={(e)=>this.selectNotSwatch(e, name)}  className ={`d-flex not-swatch ${name.split(' ').join('')}`}> 
+                                <div ref={this.MuiltRefFunc}  data-id={displayValue} onClick={(e)=>this.selectNotSwatch(e, name, displayValue)}  className ={`d-flex not-swatch ${name.split(' ').join('')}`}> 
                                 <p>{displayValue}</p> 
                                 </div>
                                 </div>
@@ -194,14 +222,18 @@ class Details extends React.Component {
   const actionCreators = {
    selectImage,
    fetchProduct,
+   getProduct,
+   addAttrib,
   }
 
 function mapStateToProps(state) {
     const cartReducer = state.cartReducer;
     const PRODUCT_QUERY = state.productReducer;
+    const myItem = state.itemReducer;
     return {
       cartReducer,
       PRODUCT_QUERY,
+      myItem,
     };
   }
   

@@ -3,6 +3,7 @@ import counter from './reducer';
 import cartReducer from './currentImage/currentImage'
 import categoryReducer from './category/reducer';
 import productReducer  from './details/reducer'
+import itemReducer from './cartItems/reducer';
 import logger from 'redux-logger';
 
 const reducer = combineReducers({
@@ -10,6 +11,7 @@ const reducer = combineReducers({
   cartReducer,
   categoryReducer,
   productReducer,
+  itemReducer: itemReducer,
 });
 
 const store = createStore(
