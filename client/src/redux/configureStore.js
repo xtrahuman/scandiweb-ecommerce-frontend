@@ -1,16 +1,20 @@
 import { createStore, combineReducers, applyMiddleware} from 'redux';
-import counter from './reducer';
+import editCart from './cart/editCart/reducer';
 import cartReducer from './currentImage/currentImage'
 import categoryReducer from './category/reducer';
-import productReducer  from './details/reducer'
+import productReducer  from './details/query/reducer'
 import itemReducer from './Item/reducer';
+import productData from './details/data/action';
+import allCart from './cart/addCart/reducer';
 import logger from 'redux-logger';
 
 const reducer = combineReducers({
-  counter,
+  editCart,
   cartReducer,
   categoryReducer,
   productReducer,
+  productData,
+  allCart,
   itemReducer: itemReducer,
 });
 
