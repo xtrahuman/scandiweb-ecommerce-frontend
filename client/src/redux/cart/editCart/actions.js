@@ -1,5 +1,6 @@
 export const ALL_COUNTER = 'CART/ITEMS/COUNTER'
 export const GET_CART = 'CART/ITEMS/GET'
+export const SWITCH_ATTRIBUTE = 'CART/ITEMS/ATTRIBUTES/SWITCH'
 
  export const getCartToEdit = (payload) => 
       ({
@@ -22,6 +23,28 @@ const allCounter = (cartData, sign, index,updateCart) => {
 
      return {
         type: ALL_COUNTER,
+        payload: data,
+    };
+  }
+
+export const switchAttrib = (data, index, attribName,value, updateCart) => {
+  const assign = (obj, keyPath, value) => {
+    let lastKeyIndex = keyPath.length-1;
+     for (var i = 0; i < lastKeyIndex; ++ i) {
+       let key = keyPath[i];
+       if (!(key in obj)){
+         obj[key] = {}
+       }
+       obj = obj[key];
+     }
+     obj[keyPath[lastKeyIndex]] = value;
+     
+  }
+  assign(data[index], [attribName], value)
+ updateCart(data)
+
+     return {
+        type: SWITCH_ATTRIBUTE,
         payload: data,
     };
      
