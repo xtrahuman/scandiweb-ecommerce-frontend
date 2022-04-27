@@ -3,6 +3,7 @@ import { NavLink } from 'react-router-dom';
 import logo from '../Images/a-logo.svg'
 import cartLogo from '../Images/cartlogo.svg'
 import { FaAngleDown } from 'react-icons/fa'
+import { connect } from "react-redux";
 
 class Navbar extends React.Component {
 constructor(props){
@@ -16,13 +17,18 @@ constructor(props){
   this.selectSymbol = this.selectSymbol.bind(this)
 }
 
+componentDidMount () {
+  const {getSymbol, productData} = this.props
+  console.log(productData)
+}
+
  toggleDropdown = () => this.setState(({dropDisplay}) => ({ 
   dropDisplay: !dropDisplay
 }))
  
  selectSymbol = (symbol) => {
   this.setState((prevState)=>({ dropDisplay: !prevState.dropDisplay,currency: symbol}))
-  const {getSymbol} = this.props
+  const {getSymbol, productData} = this.props
   getSymbol(symbol)
  }
  

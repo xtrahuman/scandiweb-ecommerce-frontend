@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;500;600;700&family=Roboto+Condensed:wght@700&family=Source+Sans+Pro&display=swap');
 * {
   margin: 0;
   padding: 0;
@@ -5,6 +6,20 @@
 
 body {
   margin: 0;
+  font-family: 'Raleway', sans-serif, Arial;
+  color: #1D1F22;
+
+}
+
+.page-title {
+font-family: 'Raleway', sans-serif, Arial;
+font-size: 32px;
+font-weight: 700;
+line-height: 40px;
+letter-spacing: 0em;
+text-align: left;
+margin-bottom: 30px;
+margin-top: 40px;
 }
 
 .d-flex {
@@ -34,6 +49,7 @@ body {
 
 .details-main {
  height: 100vh;
+ margin-top: 40px;
 }
 
 .justify-content-c {
@@ -159,20 +175,19 @@ ul.navs li a{
 
 .details-attributes {
   display: flex;
-  gap: 10px;
+  font-family: 'Source Sans Pro', sans-serif;
+  font-size: 14px;
+  gap: 5px;
   flex-wrap: wrap;
 }
 
 .swatch {
   width: 25px;
   height: 25px;
-  margin: 2px;
+  padding: 2px;
+  margin: 1px;
   border: 1px solid #000;
   cursor: pointer;
-}
-
-.swatch-container {
-  border: 2px solid transparent;
 }
 
 .swatch-container:hover {
@@ -187,8 +202,8 @@ ul.navs li a{
 background-color: #fff;
 color: #000;
 border: 1px solid #1D1F22;
-height: 40px;
-min-width: 40px;
+height: 35px;
+min-width: 35px;
 padding: 0 5px;
 align-items: center;
 justify-content: center;
@@ -258,17 +273,34 @@ button.details-button{
   background: #555; 
 }
 
-.cart-border-line {
+.cart-border {
   border-top: 1px solid #E5E5E5;
+  width: 100%;
+  padding: 20px 0 20px 0;
 }
 
 .cart-counter-image {
-  gap: 20px
+  gap: 20px;
+  width: 237px;
+  align-items: center;
+}
+
+.cart-img-container {
+  height: 100%;
+}
+
+.cart-attrib-name {
+  margin: 15px 0 8px 0;
+  font-family: 'Roboto Condensed', sans-serif;
+  font-weight: 700;
+  font-size: 16px;
 }
 
 .cart-counter {
   width: 23px;
+  height: 100%;
   text-align: center;
+  justify-content: space-between;
 }
 
 .counter-change {
@@ -278,6 +310,22 @@ button.details-button{
   justify-content: center;
   align-items: center;
   border: 1px solid #1D1F22;
+}
+
+.attributes-container {
+  width: 200px
+}
+
+.product-name {
+  font-weight: 500;
+  font-size: 28px;
+}
+
+.product-price {
+  margin-top: 10px;
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 20px;
 }
 
 

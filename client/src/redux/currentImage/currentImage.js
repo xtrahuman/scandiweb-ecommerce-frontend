@@ -8,20 +8,20 @@ export const selectImage = (payload) => (
 )
 
 
-const UploadCart = (cart) => localStorage.setItem('current_cart',JSON.stringify(cart))
+const UploadProductImage = (prod) => localStorage.setItem('current_prod_img',JSON.stringify(prod))
 
-const currentCart = () => JSON.parse(localStorage.getItem('current_cart'));
+const currentProdutImage = () => JSON.parse(localStorage.getItem('current_prod_img'));
 
-let initialState = currentCart()
+let initialState = currentProdutImage()
 
-if (!currentCart) {
+if (!currentProdutImage) {
   initialState = {}
 }
 
 const cartReducer = (state = initialState, action) => {
     switch (action.type) {
        case SELECTIMAGE :
-           UploadCart(action.payload)
+        UploadProductImage(action.payload)
            return action.payload;
         default :
         return state;

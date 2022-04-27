@@ -1,5 +1,5 @@
 import React from 'react';
-import {increment, decrement}  from '../redux/actions'
+// import {increment, decrement}  from '../redux/actions'
 import {fetchCategory} from '../redux/category/action'
 import { connect } from "react-redux";
 import { Link } from 'react-router-dom'
@@ -34,10 +34,7 @@ class Category extends React.Component {
             <div className='d-flex justify-content-c'>
             {
             <div className= 'container d-flex category-container'>
-            <h1 style={{textTransform:'capitalize'}}>{data.category.name}</h1>
-            <p>{counter}</p>
-            <span style={{cursor:'pointer'}} onClick={()=>decrement()}>-</span>
-            <span style={{cursor:'pointer'}} onClick={()=>increment()}>+</span>
+            <h1 className="page-title" style={{textTransform:'capitalize'}}>{data.category.name}</h1>
              <div className='d-flex row'>
              {data.category.products.map(({id, name, gallery, prices})=>
              <div className='d-flex card' key={id}>
@@ -65,16 +62,12 @@ class Category extends React.Component {
 
 
 const actionCreators = {
-    increment,
-    decrement,
     fetchCategory,
   }
 
 function mapStateToProps(state) {
-    const counter = state.counter;
     const CATEGORY_QUERY = state.categoryReducer
     return {
-      counter,
       CATEGORY_QUERY,
     };
   }

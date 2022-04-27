@@ -6,8 +6,11 @@ import {
     useParams
   } from "react-router-dom";
 import cartReducer, { selectImage } from '../redux/currentImage/currentImage'
-import { fetchProduct } from '../redux/details/action';
+import { fetchProduct } from '../redux/details/query/action';
 import addAttrib, {getProduct} from '../redux/Item/action';
+import updateCart, { addToCart } from '../redux/cart/addCart/action';
+import { v4 as uuidv4 } from 'uuid';
+import productDatafn from '../redux/details/data/action';
 import {Query} from '@apollo/client/react/components'
 import { connect } from "react-redux";
 
@@ -21,7 +24,10 @@ class Details extends React.Component {
         this.state = {
             selectedSwatch: false,
             selectedNotSwatch: false,
-            mounted: false
+            mounted: false,
+            count: 0,
+            price: 0,
+            total: 0
         }
         this.myRef = React.createRef(null);
         this.multiRef = React.createRef([]);
@@ -29,20 +35,26 @@ class Details extends React.Component {
 
         this.selectSwatch = this.selectSwatch.bind(this)
         this.selectNotSwatch = this.selectNotSwatch.bind(this)
+        this.AddToCart = this.AddToCart.bind(this)
       }
 
       componentDidMount () {
-        const {superData, categoryName, selectImage, getProduct, addAttrib, myItem} = this.props
+        const {productDatafn, productData, superData, categoryName, selectImage, getProduct, addAttrib, symbol } = this.props
         const idParam = this.props.router.params.id;
         fetchProduct(idParam);
         const currentCategory = superData.categories.filter(({name}) => name === categoryName)
         const { products } = currentCategory[0]
         console.log(products) 
         const productDetails = products.filter(({id}) => id === idParam)
-        const {gallery, name } = productDetails[0]
-        const obj = {name: name, count: 0 }
-        getProduct(obj)
-        console.log(myItem)
+        const {gallery, name, prices } = productDetails[0]
+        console.log('check')
+        console.log(productDetails[0].prices)
+        const obj = {name: name, count: this.state.count }
+        prices.filter(({currency}) => currency.symbol === symbol)
+                         .map(({currency,amount}) => getProduct({name: name, count: 0, price: amount }) )
+        productDatafn(productDetails[0]?.prices)
+        // getProduct(obj)
+        console.log('rendered')
         selectImage({image: gallery[0]})
          this.clearInterval = setTimeout(()=>{
           this.initialAttributesStyle(addAttrib)
@@ -81,6 +93,8 @@ class Details extends React.Component {
         const { addAttrib } = this.props
         const attribName = attrib.split(' ').join('')
         const parentElement= document.querySelectorAll(`.${attribName}`)
+        const updatePrice = document.querySelector('#product')
+        const priceValue = updatePrice.dataset.id
         parentElement.forEach((element) =>{
                 element.classList.forEach((classes) => {
                         if(classes === switchClass ){
@@ -91,7 +105,6 @@ class Details extends React.Component {
         let obj = {}
         obj[attribName] = value;
         addAttrib(obj)
-        // this.setState((prev) =>({...prev, ...obj}))
               selected.classList.add(switchClass)
       }
 
@@ -100,11 +113,9 @@ class Details extends React.Component {
         selectImage({image: imageUrl})
       }
 
+
       initialAttributesStyle = (addAttrib) => {
-        // const firstNotSwatch = document.querySelectorAll(".not-swatch")[0]
-        // const firstSwatch= document.querySelectorAll(".swatch-container")[0]
-        // firstNotSwatch?.classList.add('Active-not-swatch')
-        // firstSwatch?.classList.add('active-swatch')
+
         this.attribClass?.forEach(({name}) => {
           const attribName = name.split(' ').join('')
           const getAtribEl = document.querySelectorAll(`.${attribName}`)[0]
@@ -112,21 +123,74 @@ class Details extends React.Component {
           getAtribEl.classList.forEach((classl) =>
            classl === "not-swatch" ? getAtribEl.classList.add('Active-not-swatch') : getAtribEl.classList.add('active-swatch')
           )
-
-        let obj = {}
-        obj[attribName] = value;
-        addAttrib(obj);
+         let obj ={};
+          obj[attribName] = value
+          addAttrib(obj)
           
         })
+
       }
 
       componentDidUpdate () {
-        const { myItem } = this.props
-        console.log( myItem )
+        const { addAttrib, myItem, allCart } = this.props
+        console.log(myItem)
+        console.log(allCart)
+      }
+
+      compareObjects = (a,b) => {
+        let recurseCheck = (objt) => Object.entries(objt).sort().map(i => {
+          if(i[1] instanceof Object){
+            i[1] = recurseCheck(i[1]);
+          }
+          return i
+        })
+        let newA = {...a}
+        delete newA.count;
+        delete newA.total;
+        delete newA.cartId;
+        let newB = {...b};
+        delete newB.count;
+        delete newB.total;
+        delete newB.cartId;
+        return JSON.stringify(recurseCheck(newA)) === JSON.stringify(recurseCheck(newB))
+      }
+
+      AddToCart () {
+        const {myItem, addAttrib,updateCart, addToCart, allCart } = this.props
+        const updatePrice = document.querySelector('#product')
+        const priceValue = updatePrice.dataset.id
+        const obj = {}
+        obj.cartId = uuidv4()
+        obj.count = myItem.count
+        obj.total = ++obj.count * parseFloat(priceValue)
+        obj.attributes = this.attribClass
+        obj.galleries = {gallery: [...this.galleries],currentGallery:this.galleries[0]}
+        addAttrib(obj)
+        let newObj = {...myItem, ...obj}
+        let newCart = [newObj]
+        let counter = 0
+        let updatedCart = allCart.map((oldObj) =>{
+
+          if (this.compareObjects(oldObj, newObj)){
+            ++oldObj.count;
+           oldObj.total = oldObj.count * parseFloat(priceValue)
+            counter++;
+          }
+
+         return oldObj
+        })
+
+      if(counter < 1){
+          addToCart(newCart)
+          counter = 0;
+      }else {
+        updateCart(updatedCart)
+      }
+
       }
 
     render () {
-        const { PRODUCT_QUERY,myItem , fetchProduct, cartReducer, selectImage, symbol} = this.props
+        const { PRODUCT_QUERY, myItem , fetchProduct, cartReducer, selectImage, symbol} = this.props
         const idParam = this.props.router.params.id;
         console.log(myItem)
         fetchProduct(idParam)
@@ -140,6 +204,9 @@ class Details extends React.Component {
          const {id, name, gallery, prices, attributes } = product
          const element = product?.description;
          this.attribClass = attributes
+         this.galleries = gallery
+         this.prices = prices
+
         if(cartReducer === null) {
             selectImage({image: gallery[0]})
         }
@@ -158,7 +225,7 @@ class Details extends React.Component {
                   <p>{name}</p>
                   {attributes.map(({id, name,type,items}) => 
                     <div key={id}>
-                        <p>{`${name} :`}</p>
+                        <p className="cart-attrib-name">{`${name} :`}</p>
                         <div className="d-flex details-attributes">
                         {
                         items.map(({id, displayValue}) => 
@@ -186,11 +253,11 @@ class Details extends React.Component {
                    <p>prices :</p>   
                   {prices.filter(({currency}) => currency.symbol === symbol)
                          .map(({currency,amount}) => 
-                     <p className='details-amount' key={currency.symbol}>{`${currency.symbol} ${amount}`}</p>
+                     <p className='details-amount' id={'product'} data-id={amount} key={currency.symbol}>{`${currency.symbol} ${amount}`}</p>
                      )}
                   </div>
                   <div className='button-contain'>
-                      <Link to="/cart"><button className='details-button' type='button'>ADD TO CART</button></Link>
+                      <Link to="/cart"><button onClick={this.AddToCart} disabled={false} className='details-button' type='button'>ADD TO CART</button></Link>
                   </div>
                    <div className = "descriptionBody" dangerouslySetInnerHTML={ {__html: element } }></div>
                 </div>
@@ -224,16 +291,22 @@ class Details extends React.Component {
    fetchProduct,
    getProduct,
    addAttrib,
+   productDatafn,
+   addToCart,
+   updateCart,
   }
 
 function mapStateToProps(state) {
     const cartReducer = state.cartReducer;
     const PRODUCT_QUERY = state.productReducer;
     const myItem = state.itemReducer;
+    const allCart = state.allCart;
+    // const productData = state.productData;
     return {
       cartReducer,
       PRODUCT_QUERY,
       myItem,
+      allCart,
     };
   }
   
