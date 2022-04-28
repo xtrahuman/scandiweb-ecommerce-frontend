@@ -3,17 +3,20 @@ import Navbar from './component/Navbar';
 import Category from './component/category'
 import Details from './component/details';
 import Cart from './component/cart';
+import MiniCart from './component/miniCart';
 import { Route, Routes } from 'react-router-dom';
 import {Query} from '@apollo/client/react/components'
 import {gql} from "@apollo/client";
+import { connect } from "react-redux";
 
 class App extends React.Component {
-  constructor(){
-    super()
+  constructor(props){
+    super(props)
     this.nav = JSON.parse(localStorage.getItem('current_category'))
     this.state = {
       NavName: this.nav ? this.nav : 'all',
-      symbol: '$'
+      symbol: '$',
+      iconElem: ''
     }
 
     this.ALL_QUERY = gql`
@@ -44,15 +47,31 @@ class App extends React.Component {
     this.getNavName = this.getNavName.bind(this)
   }
 
+
+  componentDidUpdate = () => {
+    const { miniCartActive } = this.props
+    if (miniCartActive) {
+      document.body.classList.add('static')
+    }else {
+      document.body.classList.remove('static')
+    }
+  }
+
+
   getNavName = (name) => {
     this.setState({...this.state, NavName: name})
     localStorage.removeItem('current_cart')
   }
    
   getSymbol = (symbol) => this.setState({...this.state, symbol: symbol})
+  
+  getRefForSibling = (iconElem) =>  this.setState({...this.state, iconElem: iconElem})
+   
 
  render () {
-  const {NavName, symbol} = this.state
+  const {NavName, symbol, iconElem } = this.state
+  const { miniCartActive } = this.props
+ 
   return (
     <Query query={this.ALL_QUERY}>
     {({ loading, error, data }) => {
@@ -61,7 +80,9 @@ class App extends React.Component {
 
   return (
     <div className="App">
-     <Navbar data = {data} getNavName={this.getNavName} getSymbol={this.getSymbol} />
+     <Navbar getRefForSibling={this.getRefForSibling} data = {data} getNavName={this.getNavName} getSymbol={this.getSymbol} />
+     <div className='app-container'>
+       <div className={`${miniCartActive ? 'app-overlay' : ''}`}></div>
      <Routes>
       <Route path="/" element={<Category categoryName={NavName} symbol={symbol}/>} />
       {data.categories.map(({name}) => 
@@ -70,8 +91,10 @@ class App extends React.Component {
       <Route path={`/${name}/:id`} element={<Details superData={data} categoryName={NavName} symbol={symbol}/>}/>
       </Route>
     )}
-      <Route path={`/cart`} element={<Cart/>}/>
+      <Route path="/cart" element={<Cart/>}/>
        </Routes>
+      <MiniCart iconElem={iconElem} cartDisplay={miniCartActive ? 'minicart-active' : ''} />
+      </div>
     </div>
   )
 }}
@@ -81,4 +104,12 @@ class App extends React.Component {
 
 }
 
-export default App;
+function mapStateToProps(state) {
+  const miniCartActive = state.miniCartActive
+  return {
+    miniCartActive,
+  };
+}
+
+export default connect(mapStateToProps)(App);
+
