@@ -1,12 +1,13 @@
-import {gql} from "@apollo/client";
-export const GETCATEGORY = 'CATEGORIES/CURRENTCATEGORY/GET'
+import { gql } from '@apollo/client';
+
+export const GETCATEGORY = 'CATEGORIES/CURRENTCATEGORY/GET';
 
 export const fetchCategory = (payload) => (
-    {
-        type: GETCATEGORY,
-        payload,
-    }
-)
+  {
+    type: GETCATEGORY,
+    payload,
+  }
+);
 
 export const CATEGORY_QUERY = (payload) => gql`
 query CategoryQuery{
@@ -27,4 +28,4 @@ query CategoryQuery{
   }
 }
 }
-`
+`;

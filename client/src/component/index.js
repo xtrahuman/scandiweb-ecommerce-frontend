@@ -1,3 +1,3 @@
-import category from "./category";
+import category from './category';
 
-export default category 
+export default category;

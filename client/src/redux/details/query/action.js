@@ -1,13 +1,13 @@
-import {gql} from "@apollo/client";
+import { gql } from '@apollo/client';
 
-export const GETPRODUCT = 'CATEGORY/CURRENTPRODUCT/GET'
+export const GETPRODUCT = 'CATEGORY/CURRENTPRODUCT/GET';
 
 export const fetchProduct = (payload) => (
-    {
-        type: GETPRODUCT,
-        payload,
-    }
-)
+  {
+    type: GETPRODUCT,
+    payload,
+  }
+);
 
 export const PRODUCT_QUERY = (payload) => gql`
 query ProductQuery{
@@ -37,5 +37,4 @@ query ProductQuery{
           }
       }
 }
-`
-
+`;

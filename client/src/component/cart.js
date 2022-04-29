@@ -1,207 +1,234 @@
-import React from "react";
-import allCounter  from '../redux/cart/editCart/actions'
-import { getCartToEdit , switchAttrib} from "../redux/cart/editCart/actions";
-import updateCart from "../redux/cart/addCart/action";
+import React from 'react';
+import { FaAngleLeft, FaAngleRight } from 'react-icons/fa';
 import { v4 as uuidv4 } from 'uuid';
-import { connect } from "react-redux";
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+import allCounter, { updateImage, getCartToEdit, switchAttrib } from '../redux/cart/editCart/actions';
+import updateCart from '../redux/cart/addCart/action';
 
 class Cart extends React.Component {
-    constructor(props) {
-        super(props)
-        this.increment = this.increment.bind(this)
-        this.decrement = this.decrement.bind(this)
-    }
+  constructor(props) {
+    super(props);
+    this.increment = this.increment.bind(this);
+    this.decrement = this.decrement.bind(this);
+    this.moreHandler = this.moreHandler.bind(this);
+  }
 
-    componentDidMount () {
-        const { allCart, getCartToEdit } = this.props
-        const {cartId} = allCart
-            const data = allCart.slice()
-            getCartToEdit(data)
-            setTimeout(()=>{
-                this.initialAttributesStyle(data)
-            },1300)  
-    }
+  componentDidMount() {
+    const { allCart, getCartToEdit } = this.props;
+    const data = allCart.slice();
+    getCartToEdit(data);
+    setTimeout(() => {
+      this.initialAttributesStyle(data);
+    }, 1300);
+  }
 
-    increment = (index, updateCart) => {
-        const { allCounter, allCart } = this.props
-        allCounter(allCart, 'add', index,updateCart)
-    }
+  componentDidUpdate() {
+    const { allCart } = this.props;
+    this.initialAttributesStyle(allCart);
+  }
 
-    decrement = (index, updateCart) => {
-        const { allCounter, allCart } = this.props
-        allCounter(allCart, 'substract', index,updateCart)
-    }
+        moreHandler = (indx) => {
+          const { allCart, updateImage, updateCart } = this.props;
+          updateImage(allCart, indx, updateCart);
+        };
 
-  
-        // const { id } = currentCar;
-        // const allCars = cars.cars;
-        // let index = 0;
-      
-        // moreHandler = () => {
-        //   const l = allCars.length;
-        //   let nextIndex = 0;
-        //   if (index < l - 1) {
-        //     nextIndex = index + 1;
-        //   } else {
-        //     nextIndex = 0;
-        //   }
-        //   const nextCar = allCars[nextIndex];
-        // //   dispatch(selectCar(nextCar));
-        // };
-
-        selectSwatch = (event, name, displayValue,index, cartId) =>{
-              const selected = event.currentTarget;
-              const switchClass = 'active-swatch'
-              this.switchHandler(selected,switchClass, name, displayValue, index, cartId)
-        }
-    
-          selectNotSwatch = (event, name, displayValue,index, cartId) => {
+        selectSwatch = (event, name, displayValue, index, cartId) => {
           const selected = event.currentTarget;
-          const switchClass = 'Active-not-swatch'
-          this.switchHandler(selected,switchClass, name, displayValue,index,cartId)
+          const switchClass = 'active-swatch';
+          this.switchHandler(selected, switchClass, name, displayValue, index, cartId);
         }
-    
-          switchHandler = (selected, switchClass, attrib, value,index,cartId) => {
-            const {allCart, switchAttrib, updateCart} = this.props
-            const data = allCart.slice()
-            const attribName = attrib.split(' ').join('')
-            const cartIdCheck = `h${cartId.slice(0, 8).split('-').join('')}h`
-            const parentElement= document.querySelectorAll(`.attribName`)
-            parentElement.forEach((element) =>{
-                    element.classList.forEach((classes) => {
-                            if(classes === switchClass && element.classList.includes(cartIdCheck) ){
-                                element.classList.remove(switchClass)
-                            }
-                        }) 
-            })
-            switchAttrib(data,index, attribName,value, updateCart)
-            selected.classList.add(switchClass)
+
+          selectNotSwatch = (event, name, displayValue, index, cartId) => {
+            const selected = event.currentTarget;
+            const switchClass = 'Active-not-swatch';
+            this.switchHandler(selected, switchClass, name, displayValue, index, cartId);
           }
 
-          componentDidUpdate () {
-              const{ allCart } = this.props;
-              this.initialAttributesStyle(allCart)
+          switchHandler = (selected, switchClass, attrib, value, index, cartId) => {
+            const { allCart, switchAttrib, updateCart } = this.props;
+            const data = allCart.slice();
+            const attribName = attrib.split(' ').join('');
+            const cartIdCheck = `h${cartId.slice(0, 8).split('-').join('')}h`;
+            const parentElement = document.querySelectorAll('.attribName');
+            parentElement.forEach((element) => {
+              element.classList.forEach((classes) => {
+                if (classes === switchClass && element.classList.includes(cartIdCheck)) {
+                  element.classList.remove(switchClass);
+                }
+              });
+            });
+            switchAttrib(data, index, attribName, value, updateCart);
+            selected.classList.add(switchClass);
+          }
+
+          increment = (index, updateCart) => {
+            const { allCounter, allCart } = this.props;
+            allCounter(allCart, 'add', index, updateCart);
+          }
+
+          decrement = (index, updateCart) => {
+            const { allCounter, allCart } = this.props;
+            allCounter(allCart, 'substract', index, updateCart);
           }
 
         initialAttributesStyle = (data) => {
-            data.forEach(({cartId, attributes,...args}) =>{
-                let values = Object.entries(args)
-            attributes?.forEach(({name}) => {
-              const attribName = name.split(' ').join('')
-              const getAtribEl = document.querySelectorAll(`.${attribName}`)
-              const cartIdCheck = `h${cartId.slice(0, 8).split('-').join('')}h`
-              getAtribEl.forEach((checkAttrib) =>{
-              let value = checkAttrib.dataset.id
-                values.forEach((myVal) =>{
-              if(attribName === myVal[0] && value === myVal[1]){
-                checkAttrib.classList.forEach((classl) => {
-                    if(checkAttrib.classList.value.includes(cartIdCheck)){
-                        if(classl === "not-swatch"){
-                            checkAttrib.classList.add('Active-not-swatch')
-                        } else{
-                            checkAttrib.classList.add('active-swatch')
+          data.forEach(({ cartId, attributes, ...args }) => {
+            const values = Object.entries(args);
+            attributes?.forEach(({ name }) => {
+              const attribName = name.split(' ').join('');
+              const getAtribEl = document.querySelectorAll(`.${attribName}`);
+              const cartIdCheck = `h${cartId.slice(0, 8).split('-').join('')}h`;
+              getAtribEl.forEach((checkAttrib) => {
+                const value = checkAttrib.dataset.id;
+                values.forEach((myVal) => {
+                  if (attribName === myVal[0] && value === myVal[1]) {
+                    checkAttrib.classList.forEach((classl) => {
+                      if (checkAttrib.classList.value.includes(cartIdCheck)) {
+                        if (classl === 'not-swatch') {
+                          checkAttrib.classList.add('Active-not-swatch');
+                        } else {
+                          checkAttrib.classList.add('active-swatch');
                         }
-                    }
-                }
-            )
-              }
-            })
-              })
-            })
-        })
-          }
+                      }
+                    });
+                  }
+                });
+              });
+            });
+          });
+        }
 
-    render (){
-        const {counter, updateCart, allCart, editCart } = this.props
-        let sum = 0
-        let Qty = 0
-        let tax = 5
-        this.publicData = editCart
-        const data = editCart
-        data?.map(({total, count}) => {
-            Qty += count
-            sum+= total
-        })
+        render() {
+          const {
+            updateCart, editCart,
+          } = this.props;
+          let sum = 0;
+          let Qty = 0;
+          let tax = 5;
+          this.publicData = editCart;
+          const data = editCart;
+          data?.map(({ total, count }) => {
+            Qty += count;
+            sum += total;
+            return sum;
+          });
 
-        tax = tax * Qty
-        
-        return(
+          tax *= Qty;
+
+          return (
             <div className="d-flex justify-content-c">
               <div className="d-flex container flex-direction-column">
                 <h2 className="page-title">CART</h2>
-                {data?.map(({cartId, name, count, total, attributes,galleries},index) =>
-                <div key={uuidv4()} className="d-flex justify-content-between cart-border">
+                {data?.map(({
+                  cartId, name, count, total, attributes, galleries,
+                }, index) => (
+                  <div key={uuidv4()} className="d-flex justify-content-between cart-border">
                     <div className="d-flex flex-direction-column attributes-container">
-                        <h3 className="product-name">{name}</h3>
-                        <p className="product-price">{total.toFixed(2)}</p>
-                        {attributes.map(({id, name,type,items}) => 
-                    <div key={id}>
-                        <p className="cart-attrib-name">{`${name} :`}</p>
-                        <div className="d-flex details-attributes">
-                        {
-                        items.map(({id, displayValue}) => 
-                            <div key={id}>
-                                {
-                                type === 'swatch' ?
-                                <div>
-                                <div ref={this.MuiltRefFunc} data-name={name} data-id={displayValue} onClick={(e)=>this.selectSwatch(e, name, displayValue,index,cartId)} className={`swatch-container ${name.split(' ').join('')} h${cartId.slice(0, 8).split('-').join('')}h`}>
-                                <div  className ='swatch'  style={{backgroundColor: displayValue }}></div> 
-                                </div>
-                                </div> 
-                                :
-                                <div>
-                                <div ref={this.MuiltRefFunc} data-id={displayValue}  data-name={name} onClick={(e)=>this.selectNotSwatch(e, name, displayValue,index,cartId)}  className ={`d-flex not-swatch ${name.split(' ').join('')} h${cartId.slice(0, 8).split('-').join('')}h`}> 
-                                <p>{displayValue}</p> 
-                                </div>
-                                </div>
-                                }
-                            </div>
-                        )}
+                      <h3 className="product-name">{name}</h3>
+                      <p className="product-price">{total.toFixed(2)}</p>
+                      {attributes.map(({
+                        id, name, type, items,
+                      }) => (
+                        <div key={id}>
+                          <p className="cart-attrib-name">{`${name} :`}</p>
+                          <div className="d-flex details-attributes">
+                            {
+                        items.map(({ id, displayValue }) => (
+                          <div key={id}>
+                            {
+                                type === 'swatch'
+                                  ? (
+                                    <div>
+                                      <div role="none" ref={this.MuiltRefFunc} data-name={name} data-id={displayValue} onMouseDown={(e) => this.selectSwatch(e, name, displayValue, index, cartId)} className={`swatch-container ${name.split(' ').join('')} h${cartId.slice(0, 8).split('-').join('')}h`}>
+                                        <div className="swatch" style={{ backgroundColor: displayValue }} />
+                                      </div>
+                                    </div>
+                                  )
+                                  : (
+                                    <div>
+                                      <div role="none" ref={this.MuiltRefFunc} data-id={displayValue} data-name={name} onMouseDown={(e) => this.selectNotSwatch(e, name, displayValue, index, cartId)} className={`d-flex not-swatch ${name.split(' ').join('')} h${cartId.slice(0, 8).split('-').join('')}h`}>
+                                        <p>{displayValue}</p>
+                                      </div>
+                                    </div>
+                                  )
+}
+                          </div>
+                        ))
+}
+                          </div>
                         </div>
-                    </div>
-                  )}
+                      ))}
                     </div>
                     <div className="d-flex cart-counter-image">
-                        <div className="d-flex flex-direction-column cart-counter">
-                            <div onClick={() => this.increment(index,updateCart)} className="d-flex counter-change"><span >+</span></div>
-                            <p>{count}</p>
-                            <div onClick={() => this.decrement(index, updateCart)} className="d-flex counter-change"><span >-</span></div>
+                      <div className="d-flex flex-direction-column cart-counter">
+                        <div role="none" onMouseDown={() => this.increment(index, updateCart)} className="d-flex counter-change"><span>+</span></div>
+                        <p>{count}</p>
+                        <div role="none" onMouseDown={() => this.decrement(index, updateCart)} className="d-flex counter-change"><span>-</span></div>
+                      </div>
+                      <div className="cart-img-container">
+                        <div className="cart-img-icon-contain d-flex">
+                          <span className="cart-img-icon d-flex"><FaAngleLeft /></span>
+                          <span role="none" onMouseDown={() => this.moreHandler(index, updateCart)} className="cart-img-icon d-flex"><FaAngleRight /></span>
                         </div>
-                        <div className="cart-img-container"><img src = {galleries.currentGallery} style={{width: '100%', height: '100%', objectFit: 'contain'}}/></div>
+                        <img src={galleries.currentGallery} alt="gallery" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+                      </div>
                     </div>
-                    
+
+                  </div>
+                ))}
+                <div className="d-flex flex-direction-column order-style cart-border">
+                  <div>
+                    {' '}
+                    <span className="cart-order-title">Tax :</span>
+                    {' '}
+                    <span className="cart-order-value">{tax}</span>
+                  </div>
+                  <div>
+                    {' '}
+                    <span className="cart-order-title">Qty :</span>
+                    {' '}
+                    <span className="cart-order-value">{data ? Qty : ''}</span>
+                  </div>
+                  <div className="cart-total">
+                    {' '}
+                    <span className="cart-order-title">Total :</span>
+                    {' '}
+                    <span className="cart-order-value">{data ? sum.toFixed(2) - tax : ''}</span>
+                  </div>
+                  <button disabled className="details-button order-btn" type="button">order</button>
                 </div>
-                 )}
-                 <div className='d-flex flex-direction-column order-style cart-border'>
-                 <div> <span className="cart-order-title">Tax :</span> <span className="cart-order-value">{tax}</span></div>
-                 <div> <span className="cart-order-title">Qty :</span> <span className="cart-order-value">{data ? Qty : ''}</span></div>
-                 <div className="cart-total"> <span className="cart-order-title">Total :</span> <span className="cart-order-value">{data ? sum.toFixed(2)-tax : ''}</span></div>
-                 <button disabled={true} className='details-button order-btn' type='button'>order</button>
-                 </div>
+              </div>
             </div>
-        </div>
-        )
-    }
+          );
+        }
 }
 
 const actionCreators = {
-    allCounter,
-    updateCart,
-    getCartToEdit,
-    switchAttrib,
-  }
+  allCounter,
+  updateCart,
+  getCartToEdit,
+  switchAttrib,
+  updateImage,
+};
 
 function mapStateToProps(state) {
-    const editCart = state.editCart;
-    const CATEGORY_QUERY = state.categoryReducer
-    const myItem = state.itemReducer
-    const allCart = state.allCart
-    return {
-      editCart,
-      CATEGORY_QUERY,
-      allCart,
-      myItem,
-    };
-  }
+  const { editCart } = state;
+  const { allCart } = state;
+  return {
+    editCart,
+    allCart,
+  };
+}
 
-  export default connect(mapStateToProps,actionCreators)(Cart);
+Cart.propTypes = {
+  allCart: PropTypes.instanceOf(Array).isRequired,
+  getCartToEdit: PropTypes.func.isRequired,
+  allCounter: PropTypes.func.isRequired,
+  updateCart: PropTypes.func.isRequired,
+  switchAttrib: PropTypes.func.isRequired,
+  updateImage: PropTypes.func.isRequired,
+  editCart: PropTypes.instanceOf(Array).isRequired,
+};
+
+export default connect(mapStateToProps, actionCreators)(Cart);

@@ -1,13 +1,12 @@
-import {GETPRODUCT } from "./action";
+import { GET_PRODUCT_DATA } from './action';
 
+const productData = (state = {}, action) => {
+  switch (action.type) {
+    case GET_PRODUCT_DATA:
+      return action.payload;
+    default:
+      return state;
+  }
+};
 
-const productData = (state = {}, action) =>{
-    switch(action.type) {
-        case GETPRODUCT:
-            return action.payload;
-        default:
-            return state;
-    }
-}
-
-export default productData
+export default productData;
