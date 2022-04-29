@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from "react-redux";
-import toggleMiniCart from '../redux/display/action';
+import toggleMiniCart, { toggleDropdown } from '../redux/display/action';
 import { NavLink } from 'react-router-dom';
 import logo from '../Images/a-logo.svg'
 import cartLogo from '../Images/cartlogo.svg'
@@ -10,54 +10,45 @@ class Navbar extends React.Component {
 constructor(props){
   super(props)
   this.state = {
-    dropDisplay: false,
-    currency: this.props.data.currencies[0].symbol,
-    miniCartActive: false
+    currency: this.props.data.currencies[0].symbol
   }
 
   this.cartIconRef = React.createRef();
-
+  this.symbolWrapRef = React.createRef()
   this.toggleDropdown = this.toggleDropdown.bind(this)
   this.selectSymbol = this.selectSymbol.bind(this)
-  // this.toggleMiniCart = this.toggleMiniCart.bind(this)
 }
 
 componentDidMount () {
-  const {getSymbol, getRefForSibling, productData} = this.props
+  const { getRefForSibling } = this.props
   const iconElem = this.cartIconRef.current
+  const symbolWrap = this.symbolWrapRef.current
   console.log(iconElem)
-  getRefForSibling(iconElem)
+  getRefForSibling(iconElem, symbolWrap)
+  console.log(symbolWrap)
 }
 
- toggleDropdown = () => this.setState(({dropDisplay}) => ({ 
-  dropDisplay: !dropDisplay
-}))
+ toggleDropdown = () => {
+   const { toggleDropdown } = this.props
+    toggleDropdown()
+
+ }
  
  selectSymbol = (symbol) => {
-  this.setState((prevState)=>({ dropDisplay: !prevState.dropDisplay,currency: symbol}))
-  const {getSymbol, productData} = this.props
+  this.setState(()=>({ currency: symbol}))
+  const {getSymbol, toggleDropdown} = this.props
+  toggleDropdown()
   getSymbol(symbol)
-  console.log(this.cartIconRef.current)
  }
 
-//  toggleMiniCart = () => {
-//    const {getMiniCartstate} = this.props
-//    this.setState({miniCartActive: !this.state.miniCartActive},() =>getMiniCartstate(this.state.miniCartActive))
-    
-//  }
-
-componentWillUnmount ()  {
-  const {miniCartActive, toggleMiniCart} = this.props
-  if(!miniCartActive){
-    this.cartIconRef.current.removeEventListener("click", toggleMiniCart())
-  }
-}
-
- 
- 
 render (){
-  const { dropDisplay, currency } = this.state
-  const { data, getNavName, toggleMiniCart} = this.props
+  const { currency } = this.state
+  const { data,allCart, getNavName, toggleMiniCart, dropDownActive} = this.props
+  console.log(dropDownActive)
+  let Qty = 0
+  allCart?.map(({count}) => {
+    Qty += count
+    })
     return (
     <nav className="navbar d-flex">
     <div className="d-flex navbar-container container">
@@ -72,13 +63,14 @@ render (){
    </ul>
     <img src={logo} alt='logo' />
     <div className="currency-dropdown d-flex">
-      <div className="d-flex currency-icons" onClick = {this.toggleDropdown}>
+      <div ref={this.symbolWrapRef} className="d-flex currency-icons" onClick = {this.toggleDropdown}>
       <span >{ currency }</span>
       <span ><FaAngleDown style={{width: '10px', height: '10px'}}/></span>
       </div>
-     <ul className="d-flex currency" style= {{ display: dropDisplay ?  'flex' : 'none'}}>{data.currencies.map(({label, symbol}) => 
-     <li key={label} onClick = {()=>this.selectSymbol(symbol)}><span className='sym'>{symbol}</span>{label}</li>)}</ul>
-     <div ref={this.cartIconRef} onClick={() => toggleMiniCart()}><img src={cartLogo} style={{cursor:'pointer'}} alt = 'cart' /></div>
+     <ul className="d-flex currency" style= {{ display: dropDownActive ?  'flex' : 'none'}}>{data.currencies.map(({label, symbol}) => 
+     <li key={label} onClick = {()=>this.selectSymbol(symbol)}><span className='sym'>{symbol}</span>{label}</li>)}
+     </ul>
+     <div className='cart-icon' ref={this.cartIconRef} onClick={() => toggleMiniCart()}><div className={Qty && Qty > 0 ?'badge-qty' : 'badge-display-off'}><div>{ Qty }</div></div> <img src={cartLogo} alt = 'cart' /></div>
      </div>
      </div>
     </nav>
@@ -98,12 +90,17 @@ console.log(window.React1 === window.React2);
 
 const actionCreators = {
   toggleMiniCart,
+  toggleDropdown,
 }
 
 function mapStateToProps(state) {
+  const allCart = state.allCart
   const miniCartActive = state.miniCartActive
+  const dropDownActive = state.dropDownActive
   return {
     miniCartActive,
+    allCart,
+    dropDownActive
   };
 }
 

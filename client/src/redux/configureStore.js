@@ -5,7 +5,7 @@ import categoryReducer from './category/reducer';
 import productReducer  from './details/query/reducer'
 import itemReducer from './Item/reducer';
 import productData from './details/data/action';
-import miniCartActive from './display/reducer';
+import miniCartActive, { dropDownActive } from './display/reducer';
 import allCart from './cart/addCart/reducer';
 import logger from 'redux-logger';
 
@@ -17,6 +17,7 @@ const reducer = combineReducers({
   productData,
   allCart,
   miniCartActive,
+  dropDownActive,
   itemReducer: itemReducer,
 });
 

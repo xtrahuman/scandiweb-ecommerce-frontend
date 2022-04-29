@@ -16,7 +16,8 @@ class App extends React.Component {
     this.state = {
       NavName: this.nav ? this.nav : 'all',
       symbol: '$',
-      iconElem: ''
+      iconElem: '',
+      symbolWrap: '',
     }
 
     this.ALL_QUERY = gql`
@@ -65,13 +66,12 @@ class App extends React.Component {
    
   getSymbol = (symbol) => this.setState({...this.state, symbol: symbol})
   
-  getRefForSibling = (iconElem) =>  this.setState({...this.state, iconElem: iconElem})
+  getRefForSibling = (iconElem, symbolWrap) =>  this.setState({...this.state, iconElem: iconElem, symbolWrap: symbolWrap})
    
 
  render () {
-  const {NavName, symbol, iconElem } = this.state
+  const {NavName, symbol, iconElem, symbolWrap } = this.state
   const { miniCartActive } = this.props
- 
   return (
     <Query query={this.ALL_QUERY}>
     {({ loading, error, data }) => {
@@ -93,7 +93,7 @@ class App extends React.Component {
     )}
       <Route path="/cart" element={<Cart/>}/>
        </Routes>
-      <MiniCart iconElem={iconElem} cartDisplay={miniCartActive ? 'minicart-active' : ''} />
+      <MiniCart iconElem={iconElem} symbolWrap={symbolWrap} cartDisplay={miniCartActive ? 'minicart-active' : ''} />
       </div>
     </div>
   )

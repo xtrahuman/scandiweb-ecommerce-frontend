@@ -172,9 +172,11 @@ ul {
   align-items: flex-end;
   gap: 5px;
   cursor: pointer;
+  font-size: 500;
 }
 
 .currency {
+  font: 500;
   position: absolute;
   flex-direction: column;
   left: 50%;
@@ -580,9 +582,29 @@ button.details-button.order-btn {
     cursor: pointer;
   }
 
+  .cart-icon {
+    position: relative;
+    cursor: pointer;
+  }
 
-  /* .attributes-minicart-container {
-    width: 130px;
-  } */
+  .badge-qty {
+    position: absolute;
+    right: -50%;
+    top: -50%;
+    border-radius: 50%;
+    background-color: #1D1F22;
+    color: #fff;
+    font-size: 13px;
+    width: 18px;
+    height: 18px;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    display: flex;
+  }
+
+  .badge-display-off {
+    display: none;
+  }
 
 

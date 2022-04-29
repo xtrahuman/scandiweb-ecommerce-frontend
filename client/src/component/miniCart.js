@@ -5,7 +5,7 @@ import { getCartToEdit , switchAttrib} from "../redux/cart/editCart/actions";
 import updateCart from "../redux/cart/addCart/action";
 import { v4 as uuidv4 } from 'uuid';
 import { connect } from "react-redux";
-import toggleMiniCart from "../redux/display/action";
+import toggleMiniCart, { toggleDropdown } from "../redux/display/action";
 
 class MiniCart extends React.Component {
     constructor(props) {
@@ -42,12 +42,16 @@ class MiniCart extends React.Component {
       }
     
       handleClickOutside(event) {
-          const {iconElem, toggleMiniCart, miniCartActive} = this.props
+          const {iconElem, toggleMiniCart, symbolWrap, toggleDropdown, miniCartActive, dropDownActive} = this.props
         if ( iconElem && !iconElem.contains(event.target) && miniCartActive && this.wrapperRef && !this.wrapperRef.current.contains(event.target)) {
                 toggleMiniCart()
         }
-      }
 
+        if ( symbolWrap && !symbolWrap.contains(event.target) && dropDownActive){
+            toggleDropdown()
+        }
+
+      }
   
         // const { id } = currentCar;
         // const allCars = cars.cars;
@@ -132,7 +136,6 @@ class MiniCart extends React.Component {
         let sum = 0
         let Qty = 0
         let tax = 5
-        console.log(miniCartActive)
         this.publicData = editCart
         const data = editCart
         data?.map(({total, count}) => {
@@ -209,6 +212,7 @@ const actionCreators = {
     getCartToEdit,
     switchAttrib,
     toggleMiniCart,
+    toggleDropdown,
   }
 
 function mapStateToProps(state) {
@@ -216,6 +220,7 @@ function mapStateToProps(state) {
     const CATEGORY_QUERY = state.categoryReducer
     const myItem = state.itemReducer
     const allCart = state.allCart
+    const dropDownActive = state.dropDownActive
     const miniCartActive = state.miniCartActive
     return {
       editCart,
@@ -223,6 +228,7 @@ function mapStateToProps(state) {
       allCart,
       myItem,
       miniCartActive,
+      dropDownActive,
     };
   }
 
