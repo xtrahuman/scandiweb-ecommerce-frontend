@@ -5,7 +5,7 @@
 
  cart                                    |  category page
 :---------------------------------------:|:---------------------------------------:
-![](./public/cart.PNG)                   |  ![](./public/cate.gory.PNG) 
+![](./client/public/cart.PNG)                   |  ![](./client/public/cate.gory.PNG) 
 
 
 
@@ -16,7 +16,6 @@
 - [CSS](https://www.w3schools.com/css/)
 - [JS](https://www.javascript.com/)
 
-# Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
