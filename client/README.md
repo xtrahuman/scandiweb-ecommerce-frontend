@@ -5,7 +5,7 @@
 
  cart                                    |  category page
 :---------------------------------------:|:---------------------------------------:
-![](./public/cart.PNG)                   |  ![](./public/cat.gory.PNG) 
+![](./public/cart.PNG)                   |  ![](./public/cate.gory.PNG) 
 
 
 
