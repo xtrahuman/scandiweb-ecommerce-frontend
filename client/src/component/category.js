@@ -36,14 +36,14 @@ class Category extends React.Component {
                   <h1 className="page-title" style={{ textTransform: 'capitalize' }}>{data.category.name}</h1>
                   <div className="d-flex row">
                     {data.category.products.map(({
-                      id, name, gallery, prices,
+                     inStock, id, name, gallery, prices,
                     }) => (
                       <div className="d-flex card" key={id}>
                         <div className="d-flex card-container">
-                          <div className="img-container"><img src={gallery[0]} style={{ width: '100%', height: '350px', objectFit: 'contain' }} alt={id} /></div>
-                          <Link to={`/${categoryName}/${id}`}><p className="card-name">{name}</p></Link>
+                          <div className="img-container"><p className={`${ inStock ? 'alert-off' : 'out-of-stock'}`}>out of stock</p><img src={gallery[0]} style={{ width: '100%', height: '350px', objectFit: 'contain' }} alt={id} /></div>
+                          <Link to={`${ inStock ? `/${categoryName}/${id}` : '#'}`}><p className={`${ inStock ? 'enable-hover' : 'disabled'} card-name`}>{name}</p></Link>
                           {prices.filter(({ currency }) => currency.symbol === symbol)
-                            .map(({ currency, amount }) => <p className="card-name" key={currency.symbol}>{`${currency.symbol} ${amount}`}</p>)}
+                            .map(({ currency, amount }) => <p className={`${ inStock ? '' : 'disabled'} card-name`} key={currency.symbol}>{`${currency.symbol} ${amount}`}</p>)}
                         </div>
                       </div>
                     ))}

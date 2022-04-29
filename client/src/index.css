@@ -47,6 +47,13 @@ body.static {
   display: none;
 }
 
+.details-product-name {
+  font-weight: 600;
+  font-family: 'Raleway', sans-serif;
+  font-size: 30px;
+  line-height: 27px;
+}
+
 .minicart-active {
   display: flex;
 }
@@ -155,6 +162,15 @@ ul.navs {
   text-decoration: none;
 }
 
+.card-container a {
+  text-decoration: none;
+  color: #1d1f22;
+  font-family: 'Raleway', sans-serif;
+  font-size: 18px;
+  font-weight: 300;
+  line-height: 29px;
+}
+
 ul.navs li a {
   text-decoration: none;
   color: #1d1f22;
@@ -250,8 +266,35 @@ ul.currency li:hover {
   align-items: start;
 }
 
+.card-container a:hover .enable-hover {
+  text-decoration: underline;
+}
+
+.disabled,
+.card-container a .disabled {
+  color: #8d8f9a;
+  cursor: text;
+}
+
 .img-container {
   width: 100%;
+  position: relative;
+}
+
+.out-of-stock {
+  font-size: 30px;
+  color: #8d8f9a;
+  font-weight: 400;
+  position: absolute;
+  display: flex;
+  top: 50%;
+  left: 50%;
+  transform: translateY(-50%);
+  transform: translateX(-50%);
+}
+
+.alert-off {
+  display: none;
 }
 
 .card-name {
@@ -280,6 +323,14 @@ ul.currency li:hover {
 
 .details-contents {
   width: 40%;
+}
+
+.details-amount {
+  font-family: 'Raleway', sans-serif;
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 18px;
+  padding: 15px 0;
 }
 
 .details-attributes {
@@ -416,11 +467,13 @@ button.details-button {
   cursor: pointer;
 }
 
-.cart-attrib-name {
+.cart-attrib-name,
+.cart-attrib-price {
   margin: 15px 0 8px 0;
   font-family: 'Roboto Condensed', sans-serif;
   font-weight: 700;
   font-size: 16px;
+  font-size: 18px;
 }
 
 .cart-counter {
