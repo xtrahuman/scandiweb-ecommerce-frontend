@@ -51,7 +51,7 @@ function mapStateToProps(state) {
   return {
     allCart,
     deleteDisplay,
-    getIndex
+    getIndex,
   };
 }
 

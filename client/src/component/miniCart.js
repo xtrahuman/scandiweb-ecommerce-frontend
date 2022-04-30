@@ -58,7 +58,9 @@ class MiniCart extends React.Component {
     }
 
       decrement = (index, updateCart) => {
-        const { allCounter, allCart, displayDelete, setIndex } = this.props;
+        const {
+          allCounter, allCart, displayDelete, setIndex,
+        } = this.props;
         allCounter(allCart, 'substract', index, updateCart, displayDelete);
         setIndex(index);
       }
@@ -127,7 +129,7 @@ class MiniCart extends React.Component {
 
         render() {
           const {
-            updateCart, toggleMiniCart, cartDisplay, editCart
+            updateCart, toggleMiniCart, cartDisplay, editCart,
           } = this.props;
           let sum = 0;
           let Qty = 0;
@@ -260,6 +262,7 @@ MiniCart.propTypes = {
   setIndex: PropTypes.func.isRequired,
   dropDownActive: PropTypes.bool.isRequired,
   getCartToEdit: PropTypes.func.isRequired,
+  displayDelete: PropTypes.func.isRequired,
   allCounter: PropTypes.func.isRequired,
   updateCart: PropTypes.func.isRequired,
   switchAttrib: PropTypes.func.isRequired,
