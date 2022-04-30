@@ -336,7 +336,7 @@ ul.currency li:hover {
 .details-attributes {
   display: flex;
   font-family: 'Source Sans Pro', sans-serif;
-  font-size: 14px;
+  font-size: 16px;
   gap: 5px;
   flex-wrap: wrap;
 }
@@ -362,13 +362,13 @@ ul.currency li:hover {
   background-color: #fff;
   color: #000;
   border: 1px solid #1d1f22;
-  height: 35px;
-  min-width: 35px;
+  height: 40px;
+  min-width: 40px;
   padding: 0 5px;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  font-size: 14px;
+  font-size: 16px;
 }
 
 .not-swatch p {
@@ -399,6 +399,8 @@ button.details-button {
   color: #fff;
   max-width: 292px;
   padding: 16px 32px 16px 32px;
+  font-weight: 600;
+  font-size: 18px;
 }
 
 .descriptionBody {
