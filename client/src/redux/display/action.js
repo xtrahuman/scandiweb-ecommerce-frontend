@@ -13,7 +13,7 @@ export const toggleDropdown = () => ({
 
 export const setIndex = (payload) => ({
   type: GET_INDEX,
-  payload: payload
+  payload,
 });
 
 export const displayDelete = () => ({

@@ -4,7 +4,9 @@ import { v4 as uuidv4 } from 'uuid';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { displayDelete, setIndex } from '../redux/display/action';
-import allCounter, { updateImage, getCartToEdit, switchAttrib, deleteItem } from '../redux/cart/editCart/actions';
+import allCounter, {
+  updateImage, getCartToEdit, switchAttrib, deleteItem,
+} from '../redux/cart/editCart/actions';
 import updateCart from '../redux/cart/addCart/action';
 
 class Cart extends React.Component {
@@ -13,7 +15,7 @@ class Cart extends React.Component {
     this.increment = this.increment.bind(this);
     this.decrement = this.decrement.bind(this);
     this.moreHandler = this.moreHandler.bind(this);
-    this.deleteHandler = this.deleteHandler.bind(this)
+    this.deleteHandler = this.deleteHandler.bind(this);
   }
 
   componentDidMount() {
@@ -66,19 +68,23 @@ class Cart extends React.Component {
 
           increment = (index, updateCart) => {
             const { allCounter, allCart, displayDelete } = this.props;
-            allCounter(allCart, 'add', index, updateCart, displayDelete );
+            allCounter(allCart, 'add', index, updateCart, displayDelete);
           }
 
           decrement = (index, updateCart) => {
-            const { allCounter, allCart, displayDelete, setIndex } = this.props;
-            setIndex(index)
-            allCounter(allCart, 'substract', index, updateCart,displayDelete );
+            const {
+              allCounter, allCart, displayDelete, setIndex,
+            } = this.props;
+            setIndex(index);
+            allCounter(allCart, 'substract', index, updateCart, displayDelete);
           }
 
           deleteHandler = (index) => {
-              const {allCart, displayDelete, updateCart, deleteItem} = this.props;
-              deleteItem(allCart, index, updateCart);
-              displayDelete();
+            const {
+              allCart, displayDelete, updateCart, deleteItem,
+            } = this.props;
+            deleteItem(allCart, index, updateCart);
+            displayDelete();
           }
 
         initialAttributesStyle = (data) => {
@@ -227,12 +233,10 @@ const actionCreators = {
 function mapStateToProps(state) {
   const { editCart } = state;
   const { allCart } = state;
-  const {deleteDisplay} = state
-  const {getIndex} = state
+  const { getIndex } = state;
   return {
     editCart,
     allCart,
-    deleteDisplay,
     getIndex,
   };
 }
@@ -242,8 +246,8 @@ Cart.propTypes = {
   getCartToEdit: PropTypes.func.isRequired,
   allCounter: PropTypes.func.isRequired,
   deleteItem: PropTypes.func.isRequired,
+  setIndex: PropTypes.func.isRequired,
   displayDelete: PropTypes.func.isRequired,
-  deleteDisplay: PropTypes.bool.isRequired,
   updateCart: PropTypes.func.isRequired,
   switchAttrib: PropTypes.func.isRequired,
   updateImage: PropTypes.func.isRequired,

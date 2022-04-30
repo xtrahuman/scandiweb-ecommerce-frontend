@@ -1,5 +1,5 @@
 import {
-  UPDATE_IMAGE, GET_CART, ALL_COUNTER, SWITCH_ATTRIBUTE, DELETE_ITEM
+  UPDATE_IMAGE, GET_CART, ALL_COUNTER, SWITCH_ATTRIBUTE, DELETE_ITEM,
 } from './actions';
 
 const editCart = (state = [], action) => {

@@ -15,8 +15,8 @@ const allCounter = (cartData, sign, index, updateCart, displayDelete) => {
     data[index].count += 1;
   } else if (data[index].count > 0 && sign === 'substract') {
     data[index].count -= 1;
-    if(data[index].count === 0){
-      displayDelete()
+    if (data[index].count === 0) {
+      displayDelete();
       data[index].count += 1;
     }
   }
@@ -31,9 +31,9 @@ const allCounter = (cartData, sign, index, updateCart, displayDelete) => {
   };
 };
 
-export const deleteItem = (cartData, index, updateCart ) => {
-  cartData.splice(index,1)
- const data = cartData.slice()
+export const deleteItem = (cartData, index, updateCart) => {
+  cartData.splice(index, 1);
+  const data = cartData.slice();
   updateCart(data);
 
   return {

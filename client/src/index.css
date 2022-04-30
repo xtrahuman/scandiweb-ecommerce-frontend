@@ -326,7 +326,7 @@ ul.currency li:hover {
   z-index: 99;
 }
 
-.alert-delete p{
+.alert-delete p {
   margin-top: 40px;
   font-weight: 500;
   font-size: 18px;
@@ -335,7 +335,7 @@ ul.currency li:hover {
 .alert-popup-btns {
   display: flex;
   margin-top: 50px;
-  gap: 50px
+  gap: 50px;
 }
 
 .details-button.delete-btn {

@@ -200,7 +200,7 @@ class Details extends React.Component {
                     </div>
                     <div className="details-image-main"><img alt={name} src={`${cartReducer ? cartReducer.image : gallery[0]}`} style={{ width: '100%', height: 'auto' }} /></div>
                     <div className="details-contents" style={{}}>
-                      <p className='details-product-name'>{name}</p>
+                      <p className="details-product-name">{name}</p>
                       {attributes.map(({
                         id, name, type, items,
                       }) => (
@@ -234,7 +234,7 @@ class Details extends React.Component {
                         </div>
                       ))}
                       <div>
-                        <p className='cart-attrib-price'>prices :</p>
+                        <p className="cart-attrib-price">prices :</p>
                         {prices.filter(({ currency }) => currency.symbol === symbol)
                           .map(({ currency, amount }) => <p className="details-amount" id="product" data-id={amount} key={currency.symbol}>{`${currency.symbol} ${amount}`}</p>)}
                       </div>

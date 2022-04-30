@@ -88,7 +88,7 @@ class App extends React.Component {
                 getSymbol={this.getSymbol}
               />
               <div className="app-container">
-                <DeleteOverlay/>
+                <DeleteOverlay />
                 <div className={`${miniCartActive ? 'app-overlay' : ''}`} />
                 <Routes>
                   <Route path="/" element={<Category categoryName={NavName} symbol={symbol} />} />

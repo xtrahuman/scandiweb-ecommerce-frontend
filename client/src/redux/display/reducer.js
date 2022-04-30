@@ -1,4 +1,6 @@
-import { DISPLAY_DELETE, GET_INDEX, TOGGLE_CART, TOGGLE_DROP_DOWN } from './action';
+import {
+  DISPLAY_DELETE, GET_INDEX, TOGGLE_CART, TOGGLE_DROP_DOWN,
+} from './action';
 
 const miniCartActive = (state = false, action) => {
   switch (action.type) {

@@ -5,19 +5,16 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import allCounter, { getCartToEdit, switchAttrib, deleteItem } from '../redux/cart/editCart/actions';
 import updateCart from '../redux/cart/addCart/action';
-import toggleMiniCart, { toggleDropdown, displayDelete } from '../redux/display/action';
+import toggleMiniCart, { toggleDropdown, displayDelete, setIndex } from '../redux/display/action';
 
 class MiniCart extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-        getIndex: null,
-    }
     this.increment = this.increment.bind(this);
     this.decrement = this.decrement.bind(this);
     this.wrapperRef = React.createRef();
     this.MuiltRefFunc = React.createRef();
-    this.deleteHandler = this.deleteHandler.bind(this)
+    this.deleteHandler = this.deleteHandler.bind(this);
     this.handleClickOutside = this.handleClickOutside.bind(this);
   }
 
@@ -56,21 +53,21 @@ class MiniCart extends React.Component {
   }
 
     increment = (index, updateCart) => {
-        const { allCounter, allCart, displayDelete } = this.props;
-        allCounter(allCart, 'add', index, updateCart, displayDelete );
+      const { allCounter, allCart, displayDelete } = this.props;
+      allCounter(allCart, 'add', index, updateCart, displayDelete);
     }
 
       decrement = (index, updateCart) => {
-        const { allCounter, allCart, displayDelete } = this.props;
-        this.setState({getIndex:index})
-        allCounter(allCart, 'substract', index, updateCart,displayDelete );
+        const { allCounter, allCart, displayDelete, setIndex } = this.props;
+        allCounter(allCart, 'substract', index, updateCart, displayDelete);
+        setIndex(index);
       }
 
       deleteHandler = (index) => {
-        const {allCart, displayDelete, updateCart} = this.props;
+        const { allCart, displayDelete, updateCart } = this.props;
         deleteItem(allCart, index, updateCart);
         displayDelete();
-    }
+      }
 
         selectSwatch = (event, name, displayValue, index, cartId) => {
           const selected = event.currentTarget;
@@ -130,7 +127,7 @@ class MiniCart extends React.Component {
 
         render() {
           const {
-            updateCart, toggleMiniCart, cartDisplay, editCart,
+            updateCart, toggleMiniCart, cartDisplay, editCart
           } = this.props;
           let sum = 0;
           let Qty = 0;
@@ -238,6 +235,7 @@ const actionCreators = {
   toggleDropdown,
   displayDelete,
   deleteItem,
+  setIndex,
 };
 
 function mapStateToProps(state) {
@@ -259,6 +257,7 @@ MiniCart.propTypes = {
   allCart: PropTypes.instanceOf(Array).isRequired,
   cartDisplay: PropTypes.string.isRequired,
   miniCartActive: PropTypes.bool.isRequired,
+  setIndex: PropTypes.func.isRequired,
   dropDownActive: PropTypes.bool.isRequired,
   getCartToEdit: PropTypes.func.isRequired,
   allCounter: PropTypes.func.isRequired,
