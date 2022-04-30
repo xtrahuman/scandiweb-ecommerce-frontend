@@ -2,18 +2,23 @@ export const ALL_COUNTER = 'CART/ITEMS/COUNTER';
 export const GET_CART = 'CART/ITEMS/GET';
 export const UPDATE_IMAGE = 'CART/ITEMS/IMAGE';
 export const SWITCH_ATTRIBUTE = 'CART/ITEMS/ATTRIBUTES/SWITCH';
+export const DELETE_ITEM = 'CART/ITEMS/DELETE';
 
 export const getCartToEdit = (payload) => ({
   type: GET_CART,
   payload,
 });
 
-const allCounter = (cartData, sign, index, updateCart) => {
+const allCounter = (cartData, sign, index, updateCart, displayDelete) => {
   const data = cartData.slice();
   if (sign === 'add') {
     data[index].count += 1;
   } else if (data[index].count > 0 && sign === 'substract') {
     data[index].count -= 1;
+    if(data[index].count === 0){
+      displayDelete()
+      data[index].count += 1;
+    }
   }
 
   data[index].total = data[index].count * data[index].price;
@@ -22,6 +27,17 @@ const allCounter = (cartData, sign, index, updateCart) => {
 
   return {
     type: ALL_COUNTER,
+    payload: data,
+  };
+};
+
+export const deleteItem = (cartData, index, updateCart ) => {
+  cartData.splice(index,1)
+ const data = cartData.slice()
+  updateCart(data);
+
+  return {
+    type: DELETE_ITEM,
     payload: data,
   };
 };

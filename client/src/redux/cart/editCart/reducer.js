@@ -1,5 +1,5 @@
 import {
-  UPDATE_IMAGE, GET_CART, ALL_COUNTER, SWITCH_ATTRIBUTE,
+  UPDATE_IMAGE, GET_CART, ALL_COUNTER, SWITCH_ATTRIBUTE, DELETE_ITEM
 } from './actions';
 
 const editCart = (state = [], action) => {
@@ -11,6 +11,8 @@ const editCart = (state = [], action) => {
     case SWITCH_ATTRIBUTE:
       return action.payload;
     case UPDATE_IMAGE:
+      return action.payload;
+    case DELETE_ITEM:
       return action.payload;
     default:
       return state;
