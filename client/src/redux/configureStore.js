@@ -6,7 +6,7 @@ import categoryReducer from './category/reducer';
 import productReducer from './details/query/reducer';
 import itemReducer from './Item/reducer';
 import productData from './details/data/action';
-import miniCartActive, { dropDownActive, deleteDisplay } from './display/reducer';
+import miniCartActive, { dropDownActive, deleteDisplay, getIndex } from './display/reducer';
 import allCart from './cart/addCart/reducer';
 
 const reducer = combineReducers({
@@ -20,6 +20,7 @@ const reducer = combineReducers({
   dropDownActive,
   itemReducer,
   deleteDisplay,
+  getIndex,
 });
 
 const store = createStore(

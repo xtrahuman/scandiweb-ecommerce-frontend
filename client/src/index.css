@@ -42,7 +42,7 @@ body.static {
   top: 0;
   right: 5%;
   height: 90vh;
-  z-index: 4;
+  z-index: 1;
   transform: translateZ(0);
   display: none;
 }
@@ -70,7 +70,7 @@ body.static {
   position: relative;
   width: 320px;
   height: calc(90vh - 160px);
-  overflow-y: scroll;
+  overflow-y: auto;
   padding: 10px;
   right: 0;
 }
@@ -301,8 +301,9 @@ ul.currency li:hover {
   top: -30px;
   width: 100%;
   height: 100%;
-  background-color: transparent;
+  background: rgba(141, 145, 142, 0.5);
   display: flex;
+  z-index: 99;
 }
 
 .remove-delete-overlay {
@@ -317,12 +318,12 @@ ul.currency li:hover {
   width: 500px;
   top: 50%;
   left: 40%;
-  background-color: #e5e5e5;
+  background-color: #fff;
   padding: 20px;
   border-radius: 20px;
   transform: translateX(-60%);
   transform: translateY(-50%);
-  z-index: 1;
+  z-index: 99;
 }
 
 .alert-delete p{

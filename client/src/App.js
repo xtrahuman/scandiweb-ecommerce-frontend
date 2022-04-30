@@ -9,6 +9,7 @@ import Category from './component/category';
 import Details from './component/details';
 import Cart from './component/cart';
 import MiniCart from './component/miniCart';
+import DeleteOverlay from './component/deleteOverlay';
 
 class App extends React.Component {
   constructor(props) {
@@ -87,6 +88,7 @@ class App extends React.Component {
                 getSymbol={this.getSymbol}
               />
               <div className="app-container">
+                <DeleteOverlay/>
                 <div className={`${miniCartActive ? 'app-overlay' : ''}`} />
                 <Routes>
                   <Route path="/" element={<Category categoryName={NavName} symbol={symbol} />} />

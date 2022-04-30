@@ -3,19 +3,17 @@ import { FaAngleLeft, FaAngleRight } from 'react-icons/fa';
 import { v4 as uuidv4 } from 'uuid';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { displayDelete } from '../redux/display/action';
+import { displayDelete, setIndex } from '../redux/display/action';
 import allCounter, { updateImage, getCartToEdit, switchAttrib, deleteItem } from '../redux/cart/editCart/actions';
 import updateCart from '../redux/cart/addCart/action';
 
 class Cart extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-        getIndex: null,
-    }
     this.increment = this.increment.bind(this);
     this.decrement = this.decrement.bind(this);
     this.moreHandler = this.moreHandler.bind(this);
+    this.deleteHandler = this.deleteHandler.bind(this)
   }
 
   componentDidMount() {
@@ -72,13 +70,13 @@ class Cart extends React.Component {
           }
 
           decrement = (index, updateCart) => {
-            const { allCounter, allCart, displayDelete } = this.props;
-            this.setState({getIndex:index})
+            const { allCounter, allCart, displayDelete, setIndex } = this.props;
+            setIndex(index)
             allCounter(allCart, 'substract', index, updateCart,displayDelete );
           }
 
           deleteHandler = (index) => {
-              const {allCart, displayDelete, updateCart} = this.props;
+              const {allCart, displayDelete, updateCart, deleteItem} = this.props;
               deleteItem(allCart, index, updateCart);
               displayDelete();
           }
@@ -112,11 +110,8 @@ class Cart extends React.Component {
 
         render() {
           const {
-            updateCart, editCart, deleteDisplay, displayDelete
+            updateCart, editCart,
           } = this.props;
-
-          const { getIndex } = this.state
-          console.log(getIndex)
           let sum = 0;
           let Qty = 0;
           let tax = 5;
@@ -213,16 +208,6 @@ class Cart extends React.Component {
                   <button disabled className="details-button order-btn" type="button">order</button>
                 </div>
               </div>
-              <div className={`${deleteDisplay ? 'delete-overlay' : 'remove-delete-overlay'}`}>
-              <div class="alert-delete">
-                  <p>Are you sure you want to delete this item?</p>
-                  <div className='alert-popup-btns'>
-                  <button onMouseDown={()=> displayDelete()} className="details-button order-btn" type="button">Cancel</button>
-                  <button onMouseDown={()=> this.deleteHandler(getIndex)}className="details-button delete-btn order-btn" type="button">Delete</button>
-                 
-                  </div>
-                </div>
-                </div>
             </div>
           );
         }
@@ -236,16 +221,19 @@ const actionCreators = {
   updateImage,
   displayDelete,
   deleteItem,
+  setIndex,
 };
 
 function mapStateToProps(state) {
   const { editCart } = state;
   const { allCart } = state;
   const {deleteDisplay} = state
+  const {getIndex} = state
   return {
     editCart,
     allCart,
     deleteDisplay,
+    getIndex,
   };
 }
 
