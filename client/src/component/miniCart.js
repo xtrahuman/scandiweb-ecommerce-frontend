@@ -38,14 +38,7 @@ class MiniCart extends React.Component {
   }
 
   handleClickOutside(event) {
-    const {
-      iconElem, toggleMiniCart, symbolWrap, toggleDropdown, miniCartActive, dropDownActive,
-    } = this.props;
-    if (iconElem && !iconElem.contains(event.target) && !this.MuiltRefFunc
-        && !this.MuiltRefFunc.contains(event.target) && miniCartActive
-        && this.wrapperRef && !this.wrapperRef.current.contains(event.target)) {
-      toggleMiniCart();
-    }
+    const { symbolWrap, toggleDropdown, dropDownActive } = this.props;
 
     if (symbolWrap && !symbolWrap.contains(event.target) && dropDownActive) {
       toggleDropdown();
@@ -254,11 +247,9 @@ function mapStateToProps(state) {
 }
 
 MiniCart.propTypes = {
-  iconElem: PropTypes.instanceOf(Element).isRequired,
   symbolWrap: PropTypes.instanceOf(Element).isRequired,
   allCart: PropTypes.instanceOf(Array).isRequired,
   cartDisplay: PropTypes.string.isRequired,
-  miniCartActive: PropTypes.bool.isRequired,
   setIndex: PropTypes.func.isRequired,
   dropDownActive: PropTypes.bool.isRequired,
   getCartToEdit: PropTypes.func.isRequired,

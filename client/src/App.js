@@ -9,6 +9,7 @@ import Category from './component/category';
 import Details from './component/details';
 import Cart from './component/cart';
 import MiniCart from './component/miniCart';
+import toggleMiniCart from './redux/display/action';
 import DeleteOverlay from './component/deleteOverlay';
 
 class App extends React.Component {
@@ -48,6 +49,7 @@ class App extends React.Component {
 }
 `;
     this.getNavName = this.getNavName.bind(this);
+    this.closeMiniCart = this.closeMiniCart.bind(this);
   }
 
   componentDidUpdate = () => {
@@ -56,6 +58,15 @@ class App extends React.Component {
       document.body.classList.add('static');
     } else {
       document.body.classList.remove('static');
+    }
+  }
+
+  closeMiniCart = () => {
+    const {
+      miniCartActive, toggleMiniCart,
+    } = this.props;
+    if (miniCartActive) {
+      toggleMiniCart();
     }
   }
 
@@ -89,7 +100,7 @@ class App extends React.Component {
               />
               <div className="app-container">
                 <DeleteOverlay />
-                <div className={`${miniCartActive ? 'app-overlay' : ''}`} />
+                <div role="none" onMouseDown={this.closeMiniCart} className={`${miniCartActive ? 'app-overlay' : ''}`} />
                 <Routes>
                   <Route path="/" element={<Category categoryName={NavName} symbol={symbol} />} />
                   {data.categories.map(({ name }) => (
@@ -110,6 +121,10 @@ class App extends React.Component {
   }
 }
 
+const actionCreators = {
+  toggleMiniCart,
+};
+
 function mapStateToProps(state) {
   const { miniCartActive } = state;
   return {
@@ -119,6 +134,7 @@ function mapStateToProps(state) {
 
 App.propTypes = {
   miniCartActive: PropTypes.bool.isRequired,
+  toggleMiniCart: PropTypes.func.isRequired,
 };
 
-export default connect(mapStateToProps)(App);
+export default connect(mapStateToProps, actionCreators)(App);
