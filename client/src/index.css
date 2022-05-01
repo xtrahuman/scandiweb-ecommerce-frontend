@@ -646,6 +646,7 @@ button.details-button.order-btn {
   height: 20px;
   min-width: 20px;
   padding: 0 3px;
+  font-size: 13px;
 }
 
 .cart-counter-minicart-image {
