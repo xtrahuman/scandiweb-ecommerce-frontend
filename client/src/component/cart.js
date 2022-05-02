@@ -32,9 +32,9 @@ class Cart extends React.Component {
     this.initialAttributesStyle(allCart);
   }
 
-        moreHandler = (indx) => {
+        moreHandler = (indx, direction) => {
           const { allCart, updateImage, updateCart } = this.props;
-          updateImage(allCart, indx, updateCart);
+          updateImage(allCart, indx, updateCart, direction);
         };
 
         selectSwatch = (event, name, displayValue, index, cartId) => {
@@ -183,8 +183,8 @@ class Cart extends React.Component {
                       </div>
                       <div className="cart-img-container">
                         <div className="cart-img-icon-contain d-flex">
-                          <span className="cart-img-icon d-flex"><FaAngleLeft /></span>
-                          <span role="none" onMouseDown={() => this.moreHandler(index, updateCart)} className="cart-img-icon d-flex"><FaAngleRight /></span>
+                          <span role="none" onMouseDown={() => this.moreHandler(index, 'backward')} className="cart-img-icon d-flex"><FaAngleLeft /></span>
+                          <span role="none" onMouseDown={() => this.moreHandler(index, 'forward')} className="cart-img-icon d-flex"><FaAngleRight /></span>
                         </div>
                         <img src={galleries.currentGallery} alt="gallery" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
                       </div>

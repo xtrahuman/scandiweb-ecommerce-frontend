@@ -192,7 +192,7 @@ class MiniCart extends React.Component {
                         <p>{count}</p>
                         <div role="none" onMouseDown={() => this.decrement(index, updateCart)} className="d-flex counter-change counter-change-minicart"><span>-</span></div>
                       </div>
-                      <div className="cart-img-container"><img src={galleries.currentGallery} alt="gallery" style={{ width: '100%', height: '100%', objectFit: 'contain' }} /></div>
+                      <div className="minicart-img-container"><img src={galleries.currentGallery} alt="gallery" style={{ width: '100%', height: '100%', objectFit: 'contain' }} /></div>
                     </div>
 
                   </div>

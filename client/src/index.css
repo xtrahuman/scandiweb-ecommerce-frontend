@@ -498,9 +498,11 @@ button.details-button {
 }
 
 .cart-img-container {
-  height: 100%;
+  min-height: 300px;
   position: relative;
   width: 100%;
+  display: flex;
+  align-items: center;
 }
 
 .cart-img-icon-contain {
@@ -743,4 +745,12 @@ button.details-button.details-minicart-button {
 
 .badge-display-off {
   display: none;
+}
+
+.minicart-img-container {
+  min-height: 170px;
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
 }
