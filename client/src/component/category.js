@@ -43,8 +43,8 @@ class Category extends React.Component {
                         <div className="d-flex card-container">
                           <div className="img-container">
                             <p className={`${inStock ? 'alert-off' : 'out-of-stock'}`}>out of stock</p>
-                            <div className="category-image-contain">
-                              <img src={gallery[0]} style={{ width: '100%', height: '350px', objectFit: 'contain' }} alt={id} />
+                            <div className={`${inStock ? '' : 'img-opacity'} 'category-image-contain'`} >
+                              <img src={gallery[0]} style={{ width: '100%', height: '300px', objectFit: 'contain' }} alt={id} />
                               <img className="add-cart-logo" src={addCartLogo} alt="addCart" />
                             </div>
                           </div>
