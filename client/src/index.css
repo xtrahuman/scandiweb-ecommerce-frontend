@@ -256,7 +256,7 @@ ul.currency li:hover {
 }
 
 .img-opacity {
-  opacity: 50%;
+  opacity: 40%;
 }
 
 .card .add-cart-logo {
@@ -270,6 +270,7 @@ ul.currency li:hover {
   width: 30px;
   height: 30px;
   display: flex;
+  z-index: 1;
 }
 
 .card .add-cart-logo:hover {
@@ -312,6 +313,13 @@ ul.currency li:hover {
   position: relative;
 }
 
+.img-overlay {
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  position: absolute;
+}
+
 .out-of-stock {
   font-size: 30px;
   width: 100%;
@@ -326,6 +334,23 @@ ul.currency li:hover {
   z-index: 1;
   transform: translateY(-50%);
   transform: translateX(50%);
+}
+
+.quick-shop {
+  position: absolute;
+  bottom: 15%;
+  right: 10px;
+  z-index: 2;
+  display: none;
+}
+
+.open-shop {
+  display: flex;
+}
+
+.opaque-shop {
+  opacity: 70%;
+  background-color: #fff;
 }
 
 .delete-overlay {
@@ -435,6 +460,12 @@ ul.currency li:hover {
   cursor: pointer;
 }
 
+.swatch-quickshop {
+  width: 20px;
+  height: 20px;
+  padding: 1px;
+}
+
 .swatch-container:hover {
   border: 2px solid #5ece7b;
 }
@@ -454,6 +485,13 @@ ul.currency li:hover {
   justify-content: center;
   cursor: pointer;
   font-size: 16px;
+}
+
+.not-swatch-quickshop {
+  height: 25px;
+  min-width: 25px;
+  padding: 0 3px;
+  font-size: 13px;
 }
 
 .not-swatch p {
@@ -486,6 +524,13 @@ button.details-button {
   padding: 16px 32px 16px 32px;
   font-weight: 600;
   font-size: 18px;
+}
+
+button.quick-shop-btn {
+  margin-top: 10px;
+  width: 50px;
+  font-size: 12px;
+  padding: 8px;
 }
 
 .descriptionBody {
@@ -563,6 +608,10 @@ button.details-button {
   font-weight: 700;
   font-size: 16px;
   font-size: 18px;
+}
+
+.cart-attrib-name.shop-attrib-name {
+  font-size: 14px;
 }
 
 .cart-counter {
@@ -681,6 +730,10 @@ button.details-button.order-btn {
   min-width: 20px;
   padding: 0 3px;
   font-size: 13px;
+}
+
+.pointer-event-none {
+  pointer-events: none;
 }
 
 .cart-counter-minicart-image {
