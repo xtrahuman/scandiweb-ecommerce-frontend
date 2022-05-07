@@ -7,12 +7,11 @@ import {
   useParams,
 } from 'react-router-dom';
 
-import { v4 as uuidv4 } from 'uuid';
 import { Query } from '@apollo/client/react/components';
 import { connect } from 'react-redux';
 import { selectImage } from '../redux/currentImage/currentImage';
 import { fetchProduct } from '../redux/details/query/action';
-import addAttrib, { getProduct } from '../redux/Item/action';
+import addAttrib, { getProduct, switchHandler, initialAttributesStyle, handleAddLogic } from '../redux/Item/action';
 import updateCart, { addToCart } from '../redux/cart/addCart/action';
 import productDatafn from '../redux/details/data/action';
 
@@ -47,8 +46,8 @@ class Details extends React.Component {
     productDatafn(prices);
     selectImage({ image: gallery[0] });
     this.clearInterval = setTimeout(() => {
-      this.initialAttributesStyle(addAttrib);
-    }, 800);
+      initialAttributesStyle(addAttrib, this.attribClass);
+    }, 1500);
 
     this.MuiltRefFunc = (el) => {
       if (el && !this.multiRef.current.includes(el)) {
@@ -62,49 +61,22 @@ class Details extends React.Component {
   }
 
       selectSwatch = (event, name, displayValue) => {
+        const { addAttrib } = this.props;
         const selected = event.currentTarget;
         const switchClass = 'active-swatch';
-        this.switchHandler(selected, switchClass, name, displayValue);
+        switchHandler(selected, switchClass, name, displayValue, addAttrib);
       }
 
       selectNotSwatch = (event, name, displayValue) => {
+        const { addAttrib } = this.props;
         const selected = event.currentTarget;
         const switchClass = 'Active-not-swatch';
-        this.switchHandler(selected, switchClass, name, displayValue);
-      }
-
-      switchHandler = (selected, switchClass, attrib, value) => {
-        const { addAttrib } = this.props;
-        const attribName = attrib.split(' ').join('');
-        const parentElement = document.querySelectorAll(`.${attribName}`);
-        parentElement.forEach((element) => {
-          element.classList.forEach((classes) => {
-            if (classes === switchClass) {
-              element.classList.remove(switchClass);
-            }
-          });
-        });
-        const obj = {};
-        obj[attribName] = value;
-        addAttrib(obj);
-        selected.classList.add(switchClass);
+        switchHandler(selected, switchClass, name, displayValue, addAttrib);
       }
 
       getDetails = (imageUrl) => {
         const { selectImage } = this.props;
         selectImage({ image: imageUrl });
-      }
-
-      initialAttributesStyle = (addAttrib) => {
-        this.attribClass?.forEach(({ name }) => {
-          const attribName = name.split(' ').join('');
-          const getAtribEl = document.querySelectorAll(`.${attribName}`)[0];
-          const value = getAtribEl.dataset.id;
-          getAtribEl.classList.forEach((classl) => (classl === 'not-swatch' ? getAtribEl.classList.add('Active-not-swatch') : getAtribEl.classList.add('active-swatch')));
-          const obj = {};
-          obj[attribName] = value;
-          addAttrib(obj);
-        });
       }
 
       compareObjects = (a, b) => {
@@ -133,33 +105,7 @@ class Details extends React.Component {
         } = this.props;
         const updatePrice = document.querySelector('#product');
         const priceValue = updatePrice.dataset.id;
-        const obj = {};
-        obj.cartId = uuidv4();
-        obj.count = myItem.count;
-        obj.count += 1;
-        obj.total = obj.count * parseFloat(priceValue);
-        obj.attributes = this.attribClass;
-        obj.galleries = { gallery: [...this.galleries], currentGallery: this.galleries[0] };
-        addAttrib(obj);
-        const newObj = { ...myItem, ...obj };
-        const newCart = [newObj];
-        let counter = 0;
-        const updatedCart = allCart.map((oldObj) => {
-          if (this.compareObjects(oldObj, newObj)) {
-            oldObj.count += 1;
-            oldObj.total = oldObj.count * parseFloat(priceValue);
-            counter += 1;
-          }
-
-          return oldObj;
-        });
-
-        if (counter < 1) {
-          addToCart(newCart);
-          counter = 0;
-        } else {
-          updateCart(updatedCart);
-        }
+        handleAddLogic(myItem, addAttrib, updateCart, addToCart, allCart, priceValue, this.attribClass, this.galleries)
       }
 
       render() {

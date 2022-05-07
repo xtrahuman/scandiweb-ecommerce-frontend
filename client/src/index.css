@@ -42,7 +42,7 @@ body.static {
   top: 0;
   right: 5%;
   height: 500px;
-  z-index: 1;
+  z-index: 2;
   transform: translateZ(0);
   display: none;
 }
@@ -62,7 +62,7 @@ body.static {
   position: absolute;
   height: 100vh;
   width: 100%;
-  z-index: 1;
+  z-index: 2;
   background: rgba(141, 145, 142, 0.5);
 }
 

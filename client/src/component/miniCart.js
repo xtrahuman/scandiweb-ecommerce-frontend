@@ -29,8 +29,9 @@ class MiniCart extends React.Component {
   }
 
   componentDidUpdate() {
-    const { allCart } = this.props;
+    const { allCart, getCartToEdit } = this.props;
     this.initialAttributesStyle(allCart);
+    getCartToEdit(allCart)
   }
 
   componentWillUnmount() {

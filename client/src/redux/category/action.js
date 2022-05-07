@@ -24,7 +24,17 @@ query CategoryQuery{
        label
      },
        amount
-     }
+     },
+     attributes{
+      id,
+      name,
+      type,
+      items{
+        displayValue,
+        id,
+        value
+      }
+      }
   }
 }
 }
