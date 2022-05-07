@@ -36,12 +36,12 @@ body.static {
 }
 
 .miniCart-width {
-  width: 320px;
+  width: 280px;
   position: absolute;
   background-color: #fff;
   top: 0;
   right: 5%;
-  height: 90vh;
+  height: 500px;
   z-index: 1;
   transform: translateZ(0);
   display: none;
@@ -60,7 +60,7 @@ body.static {
 
 .app-overlay {
   position: absolute;
-  height: 100%;
+  height: 100vh;
   width: 100%;
   z-index: 1;
   background: rgba(141, 145, 142, 0.5);
@@ -69,7 +69,7 @@ body.static {
 .minicart-relative {
   position: relative;
   width: 320px;
-  height: calc(90vh - 160px);
+  height: calc(500px - 160px);
   overflow-y: auto;
   padding: 10px;
   right: 0;
@@ -244,10 +244,42 @@ ul.currency li:hover {
   margin: 0 15px 0 0;
   width: calc(1 / 3 * 100% - (1 - 1 / 3) * 15px);
   justify-content: center;
-  filter: drop-shadow(0 4px 4px rgb(215, 209, 220));
   background-color: #fff;
   margin-top: 20px;
-  border-radius: 10px;
+}
+
+.category-image-contain {
+  width: 100%;
+  height: 300px;
+  position: relative;
+  margin-top: 10px;
+}
+
+.img-opacity {
+  opacity: 40%;
+}
+
+.card .add-cart-logo {
+  display: none;
+}
+
+.card:hover .add-cart-logo {
+  position: absolute;
+  right: 10px;
+  bottom: 0;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  z-index: 1;
+}
+
+.card .add-cart-logo:hover {
+  width: 40px;
+  height: 40px;
+}
+
+.card:hover {
+  filter: drop-shadow(0 4px 4px rgb(215, 209, 220));
 }
 
 .row .card:nth-child(3n) {
@@ -281,6 +313,13 @@ ul.currency li:hover {
   position: relative;
 }
 
+.img-overlay {
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  position: absolute;
+}
+
 .out-of-stock {
   font-size: 30px;
   width: 100%;
@@ -292,8 +331,26 @@ ul.currency li:hover {
   display: flex;
   top: 50%;
   left: -50%;
+  z-index: 1;
   transform: translateY(-50%);
   transform: translateX(50%);
+}
+
+.quick-shop {
+  position: absolute;
+  bottom: 15%;
+  right: 10px;
+  z-index: 2;
+  display: none;
+}
+
+.open-shop {
+  display: flex;
+}
+
+.opaque-shop {
+  opacity: 70%;
+  background-color: #fff;
 }
 
 .delete-overlay {
@@ -403,6 +460,12 @@ ul.currency li:hover {
   cursor: pointer;
 }
 
+.swatch-quickshop {
+  width: 20px;
+  height: 20px;
+  padding: 1px;
+}
+
 .swatch-container:hover {
   border: 2px solid #5ece7b;
 }
@@ -422,6 +485,13 @@ ul.currency li:hover {
   justify-content: center;
   cursor: pointer;
   font-size: 16px;
+}
+
+.not-swatch-quickshop {
+  height: 25px;
+  min-width: 25px;
+  padding: 0 3px;
+  font-size: 13px;
 }
 
 .not-swatch p {
@@ -454,6 +524,13 @@ button.details-button {
   padding: 16px 32px 16px 32px;
   font-weight: 600;
   font-size: 18px;
+}
+
+button.quick-shop-btn {
+  margin-top: 10px;
+  width: 50px;
+  font-size: 12px;
+  padding: 8px;
 }
 
 .descriptionBody {
@@ -498,9 +575,11 @@ button.details-button {
 }
 
 .cart-img-container {
-  height: 100%;
+  min-height: 300px;
   position: relative;
   width: 100%;
+  display: flex;
+  align-items: center;
 }
 
 .cart-img-icon-contain {
@@ -529,6 +608,10 @@ button.details-button {
   font-weight: 700;
   font-size: 16px;
   font-size: 18px;
+}
+
+.cart-attrib-name.shop-attrib-name {
+  font-size: 14px;
 }
 
 .cart-counter {
@@ -649,6 +732,10 @@ button.details-button.order-btn {
   font-size: 13px;
 }
 
+.pointer-event-none {
+  pointer-events: none;
+}
+
 .cart-counter-minicart-image {
   gap: 15px;
   align-items: center;
@@ -685,7 +772,7 @@ button.details-button.order-btn {
 }
 
 .mini-cart-order-top {
-  margin-top: 15px;
+  margin-top: 10px;
 }
 
 .mini-cart-checkout {
@@ -694,21 +781,20 @@ button.details-button.order-btn {
 
 .button-space-btw {
   justify-content: space-between;
-  margin: 20px 0;
+  margin: 10px 0;
 }
 
 button.view-bag-btn {
   color: #1d1f22;
   background-color: #fff;
   border: 2px solid #1d1f22;
-  width: 140px;
+  width: 120px;
   cursor: pointer;
 }
 
 button.view-bag-btn:hover {
   color: #fff;
   background-color: #1d1f22;
-  width: 140px;
 }
 
 button.details-button.details-minicart-button {
@@ -716,8 +802,10 @@ button.details-button.details-minicart-button {
   font-size: 14px;
   font-weight: 600;
   height: 40px;
-  width: 140px;
+  width: 120px;
   cursor: pointer;
+  padding-left: 20px;
+  padding-right: 20px;
 }
 
 .cart-icon {
@@ -743,4 +831,12 @@ button.details-button.details-minicart-button {
 
 .badge-display-off {
   display: none;
+}
+
+.minicart-img-container {
+  min-height: 170px;
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
 }

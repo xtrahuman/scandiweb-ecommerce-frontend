@@ -63,7 +63,7 @@ export const switchAttrib = (data, index, attribName, value, updateCart) => {
   };
 };
 
-export const updateImage = (cartData, indx, updateCart) => {
+export const updateImage = (cartData, indx, updateCart, direction) => {
   const data = cartData.slice();
   const { currentGallery } = data[indx].galleries;
   const { gallery } = data[indx].galleries;
@@ -72,12 +72,21 @@ export const updateImage = (cartData, indx, updateCart) => {
   if (gallery !== undefined) {
     index = gallery.findIndex((gallery) => gallery === currentGallery);
   }
-  let nextIndex = 0;
-  if (index < l - 1) {
-    nextIndex = index + 1;
-  } else {
-    nextIndex = 0;
+  let nextIndex;
+  if (direction === 'forward') {
+    if (index < l - 1) {
+      nextIndex = index + 1;
+    } else {
+      nextIndex = 0;
+    }
+  } else if (direction === 'backward') {
+    if (index > 0 && index < l) {
+      nextIndex = index - 1;
+    } else {
+      nextIndex = l - 1;
+    }
   }
+
   data[indx].galleries.currentGallery = gallery[nextIndex];
 
   updateCart(data);

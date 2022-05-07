@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { Query } from '@apollo/client/react/components';
+import addCartLogo from '../Images/addCartLogo.svg';
 import { fetchCategory } from '../redux/category/action';
 
 class Category extends React.Component {
@@ -42,7 +43,10 @@ class Category extends React.Component {
                         <div className="d-flex card-container">
                           <div className="img-container">
                             <p className={`${inStock ? 'alert-off' : 'out-of-stock'}`}>out of stock</p>
-                            <img src={gallery[0]} style={{ width: '100%', height: '350px', objectFit: 'contain' }} alt={id} />
+                            <div className={`${inStock ? '' : 'img-opacity'} 'category-image-contain'`} >
+                              <img src={gallery[0]} style={{ width: '100%', height: '300px', objectFit: 'contain' }} alt={id} />
+                              <img className="add-cart-logo" src={addCartLogo} alt="addCart" />
+                            </div>
                           </div>
                           <Link to={`${inStock ? `/${categoryName}/${id}` : '#'}`}><p className={`${inStock ? 'enable-hover' : 'disabled'} card-name`}>{name}</p></Link>
                           {prices.filter(({ currency }) => currency.symbol === symbol)

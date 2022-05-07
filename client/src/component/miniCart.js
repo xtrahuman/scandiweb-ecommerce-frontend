@@ -64,35 +64,6 @@ class MiniCart extends React.Component {
         displayDelete();
       }
 
-        selectSwatch = (event, name, displayValue, index, cartId) => {
-          const selected = event.currentTarget;
-          const switchClass = 'active-swatch';
-          this.switchHandler(selected, switchClass, name, displayValue, index, cartId);
-        }
-
-          selectNotSwatch = (event, name, displayValue, index, cartId) => {
-            const selected = event.currentTarget;
-            const switchClass = 'Active-not-swatch';
-            this.switchHandler(selected, switchClass, name, displayValue, index, cartId);
-          }
-
-          switchHandler = (selected, switchClass, attrib, value, index, cartId) => {
-            const { allCart, switchAttrib, updateCart } = this.props;
-            const data = allCart.slice();
-            const attribName = attrib.split(' ').join('');
-            const cartIdCheck = `h${cartId.slice(0, 8).split('-').join('')}h`;
-            const parentElement = document.querySelectorAll('.attribName');
-            parentElement.forEach((element) => {
-              element.classList.forEach((classes) => {
-                if (classes === switchClass && element.classList.includes(cartIdCheck)) {
-                  element.classList.remove(switchClass);
-                }
-              });
-            });
-            switchAttrib(data, index, attribName, value, updateCart);
-            selected.classList.add(switchClass);
-          }
-
         initialAttributesStyle = (data) => {
           data.forEach(({ cartId, attributes, ...args }) => {
             const values = Object.entries(args);
@@ -166,14 +137,14 @@ class MiniCart extends React.Component {
                                 type === 'swatch'
                                   ? (
                                     <div>
-                                      <div role="none" ref={this.MuiltRefFunc} data-name={name} data-id={displayValue} onMouseDown={(e) => this.selectSwatch(e, name, displayValue, index, cartId)} className={`swatch-container ${name.split(' ').join('')} h${cartId.slice(0, 8).split('-').join('')}h`}>
-                                        <div className="swatch swatch-minicart" style={{ backgroundColor: displayValue }} />
+                                      <div role="none" ref={this.MuiltRefFunc} data-name={name} data-id={displayValue} className={`swatch-container pointer-event-none ${name.split(' ').join('')} h${cartId.slice(0, 8).split('-').join('')}h`}>
+                                        <div className="swatch swatch-minicart pointer-event-none" style={{ backgroundColor: displayValue }} />
                                       </div>
                                     </div>
                                   )
                                   : (
                                     <div>
-                                      <div role="none" ref={this.MuiltRefFunc} data-id={displayValue} data-name={name} onMouseDown={(e) => this.selectNotSwatch(e, name, displayValue, index, cartId)} className={`d-flex not-swatch not-swatch-minicart ${name.split(' ').join('')} h${cartId.slice(0, 8).split('-').join('')}h`}>
+                                      <div role="none" ref={this.MuiltRefFunc} data-id={displayValue} data-name={name} className={`d-flex not-swatch pointer-event-none not-swatch-minicart ${name.split(' ').join('')} h${cartId.slice(0, 8).split('-').join('')}h`}>
                                         <p>{displayValue}</p>
                                       </div>
                                     </div>
@@ -192,7 +163,7 @@ class MiniCart extends React.Component {
                         <p>{count}</p>
                         <div role="none" onMouseDown={() => this.decrement(index, updateCart)} className="d-flex counter-change counter-change-minicart"><span>-</span></div>
                       </div>
-                      <div className="cart-img-container"><img src={galleries.currentGallery} alt="gallery" style={{ width: '100%', height: '100%', objectFit: 'contain' }} /></div>
+                      <div className="minicart-img-container"><img src={galleries.currentGallery} alt="gallery" style={{ width: '100%', height: '100%', objectFit: 'contain' }} /></div>
                     </div>
 
                   </div>
