@@ -31,7 +31,7 @@ class MiniCart extends React.Component {
   componentDidUpdate() {
     const { allCart, getCartToEdit } = this.props;
     this.initialAttributesStyle(allCart);
-    getCartToEdit(allCart)
+    getCartToEdit(allCart);
   }
 
   componentWillUnmount() {
@@ -94,16 +94,22 @@ class MiniCart extends React.Component {
 
         render() {
           const {
-            updateCart, toggleMiniCart, cartDisplay, editCart,
+            updateCart, toggleMiniCart, cartDisplay, editCart, symbol,
           } = this.props;
           let sum = 0;
           let Qty = 0;
           let tax = 5;
           this.publicData = editCart;
           const data = editCart;
-          data?.map(({ total, count }) => {
-            Qty += count;
+          let total;
+          data?.map(({ count, prices }) => {
+            prices.filter(({ currency }) => currency.symbol === symbol)
+              .map(({ amount }) => {
+                total = amount * count;
+                return total;
+              });
             sum += total;
+            Qty += count;
             return sum;
           });
 
@@ -119,12 +125,13 @@ class MiniCart extends React.Component {
                   <span className="minicart-qty">{data ? `${Qty} items` : ''}</span>
                 </div>
                 {data?.map(({
-                  cartId, name, count, total, attributes, galleries,
+                  cartId, name, count, attributes, galleries, prices,
                 }, index) => (
                   <div key={uuidv4()} className="d-flex justify-content-between minicart-border">
                     <div className="d-flex flex-direction-column attributes-minicart-container attributes-container">
                       <h3 className="product-minicart-name">{name}</h3>
-                      <p className="product-minicart-price">{total.toFixed(2)}</p>
+                      {prices.filter(({ currency }) => currency.symbol === symbol)
+                        .map(({ currency, amount }) => <p className="product-minicart-price" key={currency.symbol}>{`${currency.symbol} ${(amount * count).toFixed(2)}`}</p>)}
                       {attributes.map(({
                         id, name, type, items,
                       }) => (
@@ -175,13 +182,13 @@ class MiniCart extends React.Component {
                   {' '}
                   <span className="mini-cart-order-title">Tax :</span>
                   {' '}
-                  <span className="mini-cart-order-value">{tax}</span>
+                  <span className="mini-cart-order-value">{`${symbol} ${tax}`}</span>
                 </div>
                 <div className="d-flex mini-cart-checkout cart-total">
                   {' '}
                   <span className="mini-cart-order-title">Total :</span>
                   {' '}
-                  <span className="mini-cart-order-value">{data ? sum.toFixed(2) - tax : ''}</span>
+                  <span className="mini-cart-order-value">{`${symbol} ${data ? (sum + tax).toFixed(2) : ''}`}</span>
                 </div>
                 <div className="d-flex button-space-btw">
                   <Link onClick={toggleMiniCart} className="d-flex" to="/cart"><button className="details-minicart-button view-bag-btn order-btn" type="button">view bag</button></Link>
@@ -222,13 +229,13 @@ MiniCart.propTypes = {
   symbolWrap: PropTypes.instanceOf(Element).isRequired,
   allCart: PropTypes.instanceOf(Array).isRequired,
   cartDisplay: PropTypes.string.isRequired,
+  symbol: PropTypes.string.isRequired,
   setIndex: PropTypes.func.isRequired,
   dropDownActive: PropTypes.bool.isRequired,
   getCartToEdit: PropTypes.func.isRequired,
   displayDelete: PropTypes.func.isRequired,
   allCounter: PropTypes.func.isRequired,
   updateCart: PropTypes.func.isRequired,
-  switchAttrib: PropTypes.func.isRequired,
   editCart: PropTypes.instanceOf(Array).isRequired,
   toggleMiniCart: PropTypes.func.isRequired,
   toggleDropdown: PropTypes.func.isRequired,

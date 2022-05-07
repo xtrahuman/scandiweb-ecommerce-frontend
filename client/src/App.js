@@ -109,9 +109,9 @@ class App extends React.Component {
                       <Route path={`/${name}/:id`} element={<Details superData={data} categoryName={NavName} symbol={symbol} />} />
                     </Route>
                   ))}
-                  <Route path="/cart" element={<Cart />} />
+                  <Route path="/cart" element={<Cart symbol={symbol} />} />
                 </Routes>
-                <MiniCart iconElem={iconElem} symbolWrap={symbolWrap} cartDisplay={miniCartActive ? 'minicart-active' : ''} />
+                <MiniCart iconElem={iconElem} symbol={symbol} symbolWrap={symbolWrap} cartDisplay={miniCartActive ? 'minicart-active' : ''} />
               </div>
             </div>
           );

@@ -11,7 +11,9 @@ import { Query } from '@apollo/client/react/components';
 import { connect } from 'react-redux';
 import { selectImage } from '../redux/currentImage/currentImage';
 import { fetchProduct } from '../redux/details/query/action';
-import addAttrib, { getProduct, switchHandler, initialAttributesStyle, handleAddLogic } from '../redux/Item/action';
+import addAttrib, {
+  getProduct, switchHandler, initialAttributesStyle, handleAddLogic,
+} from '../redux/Item/action';
 import updateCart, { addToCart } from '../redux/cart/addCart/action';
 import productDatafn from '../redux/details/data/action';
 
@@ -31,7 +33,7 @@ class Details extends React.Component {
   componentDidMount() {
     const {
       productDatafn, superData, categoryName, router,
-      selectImage, getProduct, addAttrib, symbol,
+      selectImage, getProduct, addAttrib,
     } = this.props;
     const { params } = router;
     const { id } = params;
@@ -41,8 +43,7 @@ class Details extends React.Component {
     const { products } = currentCategory[0];
     const productDetails = products.filter(({ id }) => id === idParam);
     const { gallery, name, prices } = productDetails[0];
-    prices.filter(({ currency }) => currency.symbol === symbol)
-      .map(({ amount }) => getProduct({ name, count: 0, price: amount }));
+    getProduct({ name, count: 0 });
     productDatafn(prices);
     selectImage({ image: gallery[0] });
     this.clearInterval = setTimeout(() => {
@@ -79,33 +80,12 @@ class Details extends React.Component {
         selectImage({ image: imageUrl });
       }
 
-      compareObjects = (a, b) => {
-        const recurseCheck = (objt) => Object.entries(objt).sort().map((i) => {
-          if (i[1] instanceof Object) {
-            i[1] = recurseCheck(i[1]);
-          }
-          return i;
-        });
-        const newA = { ...a };
-        delete newA.count;
-        delete newA.total;
-        delete newA.cartId;
-        delete newA.galleries;
-        const newB = { ...b };
-        delete newB.count;
-        delete newB.total;
-        delete newB.cartId;
-        delete newB.galleries;
-        return JSON.stringify(recurseCheck(newA)) === JSON.stringify(recurseCheck(newB));
-      }
-
       AddToCart() {
         const {
           myItem, addAttrib, updateCart, addToCart, allCart,
         } = this.props;
-        const updatePrice = document.querySelector('#product');
-        const priceValue = updatePrice.dataset.id;
-        handleAddLogic(myItem, addAttrib, updateCart, addToCart, allCart, priceValue, this.attribClass, this.galleries)
+        handleAddLogic(myItem, addAttrib, updateCart, addToCart, allCart,
+          this.prices, this.attribClass, this.galleries);
       }
 
       render() {

@@ -37,7 +37,6 @@ class Cart extends React.Component {
           updateImage(allCart, indx, updateCart, direction);
         };
 
-
           increment = (index, updateCart) => {
             const { allCounter, allCart, displayDelete } = this.props;
             allCounter(allCart, 'add', index, updateCart, displayDelete);
@@ -88,16 +87,22 @@ class Cart extends React.Component {
 
         render() {
           const {
-            updateCart, editCart,
+            updateCart, editCart, symbol,
           } = this.props;
           let sum = 0;
           let Qty = 0;
           let tax = 5;
           this.publicData = editCart;
           const data = editCart;
-          data?.map(({ total, count }) => {
-            Qty += count;
+          let total;
+          data?.map(({ count, prices }) => {
+            prices.filter(({ currency }) => currency.symbol === symbol)
+              .map(({ amount }) => {
+                total = amount * count;
+                return total;
+              });
             sum += total;
+            Qty += count;
             return sum;
           });
 
@@ -108,12 +113,13 @@ class Cart extends React.Component {
               <div className="d-flex container flex-direction-column">
                 <h2 className="page-title">CART</h2>
                 {data?.map(({
-                  cartId, name, count, total, attributes, galleries,
+                  cartId, name, count, attributes, galleries, prices,
                 }, index) => (
                   <div key={uuidv4()} className="d-flex justify-content-between cart-border">
                     <div className="d-flex flex-direction-column attributes-container">
                       <h3 className="product-name">{name}</h3>
-                      <p className="product-price">{total.toFixed(2)}</p>
+                      {prices.filter(({ currency }) => currency.symbol === symbol)
+                        .map(({ currency, amount }) => <p className="product-price" key={currency.symbol}>{`${currency.symbol} ${(amount * count).toFixed(2)}`}</p>)}
                       {attributes.map(({
                         id, name, type, items,
                       }) => (
@@ -169,7 +175,7 @@ class Cart extends React.Component {
                     {' '}
                     <span className="cart-order-title">Tax :</span>
                     {' '}
-                    <span className="cart-order-value">{tax}</span>
+                    <span className="cart-order-value">{`${symbol} ${tax}`}</span>
                   </div>
                   <div>
                     {' '}
@@ -181,7 +187,7 @@ class Cart extends React.Component {
                     {' '}
                     <span className="cart-order-title">Total :</span>
                     {' '}
-                    <span className="cart-order-value">{data ? sum.toFixed(2) - tax : ''}</span>
+                    <span className="cart-order-value">{`${symbol} ${data ? (sum + tax).toFixed(2) : ''}`}</span>
                   </div>
                   <button disabled className="details-button order-btn" type="button">order</button>
                 </div>
@@ -221,8 +227,8 @@ Cart.propTypes = {
   setIndex: PropTypes.func.isRequired,
   displayDelete: PropTypes.func.isRequired,
   updateCart: PropTypes.func.isRequired,
-  switchAttrib: PropTypes.func.isRequired,
   updateImage: PropTypes.func.isRequired,
+  symbol: PropTypes.string.isRequired,
   editCart: PropTypes.instanceOf(Array).isRequired,
 };
 
