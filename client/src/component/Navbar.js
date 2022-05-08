@@ -7,7 +7,7 @@ import toggleMiniCart, { toggleDropdown } from '../redux/display/action';
 import logo from '../Images/a-logo.svg';
 import cartLogo from '../Images/cartlogo.svg';
 
-class Navbar extends React.Component {
+class Navbar extends React.PureComponent {
   constructor(props) {
     super(props);
     const { data } = this.props;

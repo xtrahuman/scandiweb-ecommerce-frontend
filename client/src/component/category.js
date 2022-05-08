@@ -8,7 +8,7 @@ import addAttrib, { switchHandler, getProduct, handleAddLogic } from '../redux/I
 import updateCart, { addToCart } from '../redux/cart/addCart/action';
 import { fetchCategory } from '../redux/category/action';
 
-class Category extends React.Component {
+class Category extends React.PureComponent {
   constructor(props) {
     super(props);
     const { categoryName, fetchCategory } = this.props;

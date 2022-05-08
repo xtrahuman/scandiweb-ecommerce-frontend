@@ -5,7 +5,7 @@ import { displayDelete } from '../redux/display/action';
 import { deleteItem } from '../redux/cart/editCart/actions';
 import updateCart from '../redux/cart/addCart/action';
 
-class DeleteOverlay extends React.Component {
+class DeleteOverlay extends React.PureComponent {
   constructor(props) {
     super(props);
     this.deleteHandler = this.deleteHandler.bind(this);

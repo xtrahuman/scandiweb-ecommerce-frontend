@@ -12,7 +12,7 @@ import MiniCart from './component/miniCart';
 import toggleMiniCart from './redux/display/action';
 import DeleteOverlay from './component/deleteOverlay';
 
-class App extends React.Component {
+class App extends React.PureComponent {
   constructor(props) {
     super(props);
     this.nav = JSON.parse(localStorage.getItem('current_category'));

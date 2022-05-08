@@ -9,7 +9,7 @@ import allCounter, {
 } from '../redux/cart/editCart/actions';
 import updateCart from '../redux/cart/addCart/action';
 
-class Cart extends React.Component {
+class Cart extends React.PureComponent {
   constructor(props) {
     super(props);
     this.increment = this.increment.bind(this);

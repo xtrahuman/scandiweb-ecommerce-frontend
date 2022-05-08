@@ -17,7 +17,7 @@ import addAttrib, {
 import updateCart, { addToCart } from '../redux/cart/addCart/action';
 import productDatafn from '../redux/details/data/action';
 
-class Details extends React.Component {
+class Details extends React.PureComponent {
   constructor(props) {
     super(props);
     this.getDetails = this.getDetails.bind(this);

@@ -7,7 +7,7 @@ import allCounter, { getCartToEdit, switchAttrib, deleteItem } from '../redux/ca
 import updateCart from '../redux/cart/addCart/action';
 import toggleMiniCart, { toggleDropdown, displayDelete, setIndex } from '../redux/display/action';
 
-class MiniCart extends React.Component {
+class MiniCart extends React.PureComponent {
   constructor(props) {
     super(props);
     this.increment = this.increment.bind(this);
