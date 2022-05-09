@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {
-  Link,
   useLocation,
   useNavigate,
   useParams,
@@ -165,7 +164,7 @@ class Details extends React.PureComponent {
                           .map(({ currency, amount }) => <p className="details-amount" id="product" data-id={amount} key={currency.symbol}>{`${currency.symbol} ${amount}`}</p>)}
                       </div>
                       <div className="button-contain">
-                        <Link to="/cart"><button onClick={this.AddToCart} disabled={false} className="details-button" type="button">ADD TO CART</button></Link>
+                        <button onClick={this.AddToCart} disabled={false} className="details-button" type="button">ADD TO CART</button>
                       </div>
                       <div className="descriptionBody" dangerouslySetInnerHTML={{ __html: element }} />
                     </div>
