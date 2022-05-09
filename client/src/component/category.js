@@ -97,14 +97,35 @@ class Category extends React.PureComponent {
     const {
       myItem, addAttrib, updateCart, addToCart, allCart, getProduct,
     } = this.props;
-    handleAddLogic(myItem, addAttrib, updateCart, addToCart, allCart, prices, attributes, gallery);
+
     const allQuickShop = document.querySelectorAll('.quick-shop');
     const imgOverlay = document.querySelectorAll('.img-overlay');
-    allQuickShop[index].classList.remove('open-shop');
-    imgOverlay[index].classList.remove('opaque-shop');
-    const obj = {};
-    getProduct(obj);
-    this.removeAttrib(attributes);
+    const showAllSuccess = document.querySelectorAll('.add-success-msg');
+    const showAllError = document.querySelectorAll('.add-error-msg');
+
+    const displayError = (showError) => {
+      if (!showError) {
+        showAllSuccess[index].classList.add('add-success');
+        showAllError[index].classList.remove('add-error');
+        allQuickShop[index].classList.remove('open-shop');
+        imgOverlay[index].classList.remove('opaque-shop');
+        const obj = {};
+        getProduct(obj);
+        this.removeAttrib(attributes);
+        setTimeout(() => {
+          showAllSuccess[index].classList.remove('add-success');
+        }, 3000);
+      } else {
+        showAllError[index].classList.add('add-error');
+        showAllSuccess[index].classList.remove('add-success');
+        setTimeout(() => {
+          showAllError[index].classList.remove('add-error');
+        }, 5000);
+      }
+    };
+
+    handleAddLogic(myItem, addAttrib, updateCart, addToCart, allCart, prices,
+      attributes, gallery, displayError);
   }
 
   render() {
@@ -127,6 +148,8 @@ class Category extends React.PureComponent {
                         <div className="d-flex card-container">
                           <div className="img-container">
                             <p className={`${inStock ? 'alert-off' : 'out-of-stock'}`}>out of stock</p>
+                            <p className="add-error-msg">kindly select all attributes</p>
+                            <p className="add-success-msg">Added successfully</p>
                             <div className="img-overlay" />
                             <div className="quick-shop flex-direction-column">
                               {attributes.map(({
@@ -162,15 +185,15 @@ class Category extends React.PureComponent {
                                 </div>
                               ))}
                               <div className="button-contain">
-                                <button onClick={() => this.AddToCart(attributes, gallery, index, prices)} disabled={false} className="details-button quick-shop-btn" type="button">ADD</button>
+                                <button onClick={() => this.AddToCart(attributes, gallery, index, prices)} disabled={!inStock} className="details-button quick-shop-btn" type="button">ADD</button>
                               </div>
                             </div>
                             <div className={`${inStock ? '' : 'img-opacity'} category-image-contain`}>
-                              <img src={gallery[0]} style={{ width: '100%', height: '300px', objectFit: 'contain' }} alt={id} />
+                              <Link to={`/${categoryName}/${id}`}><img src={gallery[0]} style={{ width: '100%', height: '300px', objectFit: 'contain' }} alt={id} /></Link>
                               <div role="none" onMouseDown={() => this.toggleQuickShop(index, attributes)} className="add-cart-logo"><img src={addCartLogo} alt="addCart" /></div>
                             </div>
                           </div>
-                          <Link to={`${inStock ? `/${categoryName}/${id}` : '#'}`}><p className={`${inStock ? 'enable-hover' : 'disabled'} card-name`}>{name}</p></Link>
+                          <Link to={`/${categoryName}/${id}`}><p className={`${inStock ? '' : 'disabled'} enable-hover card-name`}>{name}</p></Link>
                           {prices.filter(({ currency }) => currency.symbol === symbol)
                             .map(({ currency, amount }) => <p className={`${inStock ? '' : 'disabled'} card-name`} key={currency.symbol}>{`${currency.symbol} ${amount}`}</p>)}
                         </div>

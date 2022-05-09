@@ -259,6 +259,10 @@ ul.currency li:hover {
   opacity: 40%;
 }
 
+.card:hover  .img-opacity {
+  opacity: 100%;
+}
+
 .card .add-cart-logo {
   display: none;
 }
@@ -270,7 +274,7 @@ ul.currency li:hover {
   width: 30px;
   height: 30px;
   display: flex;
-  z-index: 1;
+  z-index: 10;
 }
 
 .card .add-cart-logo:hover {
@@ -305,7 +309,6 @@ ul.currency li:hover {
 .disabled,
 .card-container a .disabled {
   color: #8d8f9a;
-  cursor: text;
 }
 
 .img-container {
@@ -313,10 +316,58 @@ ul.currency li:hover {
   position: relative;
 }
 
+.pos-success-error {
+  position: relative;
+}
+
+
+.outStock-error-msg,.detail-add-error-msg,.detail-add-success-msg,.add-error-msg,.add-success-msg {
+  font-size: 12px;
+  position: absolute;
+  left: -50%;
+  transform: translateX(50%);
+  justify-content: center;
+  bottom: 0;
+  width: 100%;
+  display: none;
+  z-index: 2;
+}
+
+.pos-bottom {
+  top: -35px;
+  bottom: '';
+}
+
+.add-error {
+  color: #f44336;
+  display: flex;
+  text-align: center;
+}
+
+.outStock-display-msg, .add-error-detail {
+  color: #f44336;
+  font-size: 14px;
+  display: flex;
+  text-align: center;
+}
+
+.add-success {
+  color: rgb(5, 148, 5);
+  display: flex;
+  text-align: center;
+}
+
+.add-success-detail {
+  color: rgb(5, 148, 5);
+  font-size: 14px;
+  display: flex;
+  text-align: center;
+}
+
 .img-overlay {
   width: 100%;
   height: 100%;
-  z-index: 1;
+  z-index: 0;
   position: absolute;
 }
 
@@ -350,6 +401,7 @@ ul.currency li:hover {
 
 .opaque-shop {
   opacity: 70%;
+  z-index: 1;
   background-color: #fff;
 }
 
@@ -408,7 +460,7 @@ ul.currency li:hover {
 }
 
 .card-name {
-  margin: 3px 0;
+  margin: 8px 0 3px;
 }
 
 .card-name:last-child {

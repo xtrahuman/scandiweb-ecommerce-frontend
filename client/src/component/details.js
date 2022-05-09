@@ -47,7 +47,7 @@ class Details extends React.PureComponent {
     selectImage({ image: gallery[0] });
     this.clearInterval = setTimeout(() => {
       initialAttributesStyle(addAttrib, this.attribClass);
-    }, 1500);
+    }, 1300);
 
     this.MuiltRefFunc = (el) => {
       if (el && !this.multiRef.current.includes(el)) {
@@ -83,8 +83,23 @@ class Details extends React.PureComponent {
         const {
           myItem, addAttrib, updateCart, addToCart, allCart,
         } = this.props;
+        const showAllSuccess = document.querySelector('.detail-add-success-msg');
+        const showAllError = document.querySelector('.detail-add-error-msg');
+        const displayError = (showError) => {
+          if (!showError) {
+            showAllSuccess.classList.add('add-success-detail');
+            setTimeout(() => {
+              showAllSuccess.classList.remove('add-success-detail');
+            }, 5000);
+          } else {
+            showAllError.classList.add('add-error-detail');
+            setTimeout(() => {
+              showAllError.classList.remove('add-error-detail');
+            }, 5000);
+          }
+        };
         handleAddLogic(myItem, addAttrib, updateCart, addToCart, allCart,
-          this.prices, this.attribClass, this.galleries);
+          this.prices, this.attribClass, this.galleries, displayError);
       }
 
       render() {
@@ -103,12 +118,13 @@ class Details extends React.PureComponent {
               if (loading || !data) return <h1>Loading...</h1>;
               const { product } = data;
               const {
-                name, gallery, prices, attributes,
+                name, inStock, gallery, prices, attributes,
               } = product;
               const element = product?.description;
               this.attribClass = attributes;
               this.galleries = gallery;
               this.prices = prices;
+              this.inStock = inStock;
 
               if (cartReducer === null) {
                 selectImage({ image: gallery[0] });
@@ -124,7 +140,10 @@ class Details extends React.PureComponent {
                       ))}
                     </div>
                     <div className="details-image-main"><img alt={name} src={`${cartReducer ? cartReducer.image : gallery[0]}`} style={{ width: '100%', height: 'auto' }} /></div>
-                    <div className="details-contents" style={{}}>
+                    <div className="details-contents pos-success-error">
+                      <p className="detail-add-error-msg pos-bottom">kindly select all attributes</p>
+                      <p className={`${!inStock ? 'outStock-display-msg' : ''} outStock-error-msg pos-bottom`}>This item is out of stock</p>
+                      <p className="detail-add-success-msg pos-bottom">Added successfully</p>
                       <p className="details-product-name">{name}</p>
                       {attributes.map(({
                         id, name, type, items,
@@ -164,7 +183,7 @@ class Details extends React.PureComponent {
                           .map(({ currency, amount }) => <p className="details-amount" id="product" data-id={amount} key={currency.symbol}>{`${currency.symbol} ${amount}`}</p>)}
                       </div>
                       <div className="button-contain">
-                        <button onClick={this.AddToCart} disabled={false} className="details-button" type="button">ADD TO CART</button>
+                        <button onClick={this.AddToCart} disabled={!inStock} className="details-button" type="button">ADD TO CART</button>
                       </div>
                       <div className="descriptionBody" dangerouslySetInnerHTML={{ __html: element }} />
                     </div>

@@ -64,34 +64,48 @@ const compareObjects = (a, b) => {
 };
 
 export const handleAddLogic = (myItem, addAttrib, updateCart, addToCart,
-  allCart, prices, attribClass, galleries) => {
+  allCart, prices, attribClass, galleries, displayError) => {
   const obj = {};
   obj.cartId = uuidv4();
   obj.count = myItem.count;
-  obj.count += 1;
+  obj.count = 1;
   obj.prices = prices;
   obj.attributes = attribClass;
   obj.galleries = { gallery: [...galleries], currentGallery: galleries[0] };
   addAttrib(obj);
   const newObj = { ...myItem, ...obj };
+  let keyCount = 0;
+  attribClass.map(({ name }) => {
+    const nameKey = name.split(' ').join('');
+    Object.keys(newObj).forEach((key) => {
+      if (key === nameKey) {
+        keyCount += 1;
+      }
+    });
+    return keyCount;
+  });
   const newCart = [newObj];
   let counter = 0;
   const data = allCart.slice();
-  const updatedCart = data.map((oldObj) => {
-    if (compareObjects(oldObj, newObj)) {
-      oldObj.count += 1;
-      counter += 1;
+  if (keyCount === attribClass.length) {
+    displayError(false);
+    const updatedCart = data.map((oldObj) => {
+      if (compareObjects(oldObj, newObj)) {
+        oldObj.count += 1;
+        counter += 1;
+      }
+      return oldObj;
+    });
+
+    if (counter < 1) {
+      const newData = newCart.slice();
+      addToCart(newData);
+      counter = 0;
+    } else {
+      updateCart(updatedCart);
     }
-
-    return oldObj;
-  });
-
-  if (counter < 1) {
-    const newData = newCart.slice();
-    addToCart(newData);
-    counter = 0;
   } else {
-    updateCart(updatedCart);
+    displayError(true);
   }
 };
 
