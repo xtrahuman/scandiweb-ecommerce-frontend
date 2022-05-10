@@ -321,7 +321,7 @@ ul.currency li:hover {
 }
 
 
-.outStock-error-msg,.detail-add-error-msg,.detail-add-success-msg,.add-error-msg,.add-success-msg {
+.detail-add-error-msg,.detail-add-success-msg,.add-error-msg,.add-success-msg {
   font-size: 12px;
   position: absolute;
   left: -50%;
@@ -333,9 +333,18 @@ ul.currency li:hover {
   z-index: 2;
 }
 
+.outStock-error-msg{
+  position: absolute;
+  left: -50%;
+  transform: translateX(50%);
+  justify-content: center;
+  width: 100%;
+  display: none;
+  z-index: 2;
+}
+
 .pos-bottom {
   top: -35px;
-  bottom: '';
 }
 
 .add-error {

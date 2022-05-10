@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import Parser from 'html-react-parser';
 import {
   useLocation,
   useNavigate,
@@ -185,7 +186,11 @@ class Details extends React.PureComponent {
                       <div className="button-contain">
                         <button onClick={this.AddToCart} disabled={!inStock} className="details-button" type="button">ADD TO CART</button>
                       </div>
-                      <div className="descriptionBody" dangerouslySetInnerHTML={{ __html: element }} />
+                      <div className="descriptionBody">
+                        {
+                       Parser(element)
+                      }
+                      </div>
                     </div>
                   </div>
                 </div>
