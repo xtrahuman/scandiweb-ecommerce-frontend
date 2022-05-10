@@ -10,12 +10,11 @@ import {
 import { Query } from '@apollo/client/react/components';
 import { connect } from 'react-redux';
 import { selectImage } from '../redux/currentImage/currentImage';
-import { fetchProduct } from '../redux/details/query/action';
+import productDatafn, { fetchProduct } from '../redux/details/action';
 import addAttrib, {
   getProduct, switchHandler, initialAttributesStyle, handleAddLogic,
 } from '../redux/Item/action';
 import updateCart, { addToCart } from '../redux/cart/addCart/action';
-import productDatafn from '../redux/details/data/action';
 
 class Details extends React.PureComponent {
   constructor(props) {

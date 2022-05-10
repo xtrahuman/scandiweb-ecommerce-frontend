@@ -3,9 +3,8 @@ import logger from 'redux-logger';
 import editCart from './cart/editCart/reducer';
 import cartReducer from './currentImage/currentImage';
 import categoryReducer from './category/reducer';
-import productReducer from './details/query/reducer';
 import itemReducer from './Item/reducer';
-import productData from './details/data/action';
+import productReducer, { productData } from './details/reducer';
 import miniCartActive, { dropDownActive, deleteDisplay, getIndex } from './display/reducer';
 import allCart from './cart/addCart/reducer';
 

@@ -1,4 +1,5 @@
-import { GETCATEGORY, CATEGORY_QUERY } from './action';
+import { GETCATEGORY } from './action';
+import { CATEGORY_QUERY } from '../queries/queries';
 
 const UploadCategory = (category) => localStorage.setItem('current_category', JSON.stringify(category));
 

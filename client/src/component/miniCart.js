@@ -179,15 +179,11 @@ class MiniCart extends React.PureComponent {
               </div>
               <div className="d-flex flex-direction-column mini-order-style">
                 <div className="d-flex mini-cart-checkout mini-cart-order-top">
-                  {' '}
                   <span className="mini-cart-order-title">Tax :</span>
-                  {' '}
                   <span className="mini-cart-order-value">{`${symbol} ${tax}`}</span>
                 </div>
                 <div className="d-flex mini-cart-checkout cart-total">
-                  {' '}
                   <span className="mini-cart-order-title">Total :</span>
-                  {' '}
                   <span className="mini-cart-order-value">{`${symbol} ${data ? (sum + tax).toFixed(2) : ''}`}</span>
                 </div>
                 <div className="d-flex button-space-btw">
