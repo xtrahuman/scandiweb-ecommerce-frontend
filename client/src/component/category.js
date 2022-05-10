@@ -4,13 +4,19 @@ import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { Query } from '@apollo/client/react/components';
 import addCartLogo from '../Images/addCartLogo.svg';
+import addAttrib, { switchHandler, getProduct, handleAddLogic } from '../redux/Item/action';
+import updateCart, { addToCart } from '../redux/cart/addCart/action';
 import { fetchCategory } from '../redux/category/action';
 
-class Category extends React.Component {
+class Category extends React.PureComponent {
   constructor(props) {
     super(props);
     const { categoryName, fetchCategory } = this.props;
     fetchCategory(categoryName);
+    this.toggleQuickShop = this.toggleQuickShop.bind(this);
+    this.selectSwatch = this.selectSwatch.bind(this);
+    this.selectNotSwatch = this.selectNotSwatch.bind(this);
+    this.AddToCart = this.AddToCart.bind(this);
   }
 
   componentDidMount() {
@@ -21,6 +27,105 @@ class Category extends React.Component {
   componentDidUpdate() {
     const { categoryName, fetchCategory } = this.props;
     fetchCategory(categoryName);
+  }
+
+  selectSwatch = (event, name, displayValue) => {
+    const { addAttrib } = this.props;
+    const selected = event.currentTarget;
+    const switchClass = 'active-swatch';
+    switchHandler(selected, switchClass, name, displayValue, addAttrib);
+  }
+
+  selectNotSwatch = (event, name, displayValue) => {
+    const { addAttrib } = this.props;
+    const selected = event.currentTarget;
+    const switchClass = 'Active-not-swatch';
+    switchHandler(selected, switchClass, name, displayValue, addAttrib);
+  }
+
+   removeAttrib = (attributes) => {
+     attributes.forEach(({ name }) => {
+       const attribName = name.split(' ').join('');
+       const parentElement = document.querySelectorAll(`.${attribName}`);
+       parentElement.forEach((element) => {
+         element.classList.forEach((classes) => {
+           if (classes === 'active-swatch' || classes === 'Active-not-swatch') {
+             element.classList.remove('active-swatch');
+             element.classList.remove('Active-not-swatch');
+           }
+         });
+       });
+     });
+   }
+
+  toggleQuickShop = (index, attributes) => {
+    const { getProduct } = this.props;
+    const allQuickShop = document.querySelectorAll('.quick-shop');
+    const card = document.querySelectorAll('.card')[index];
+    const imgOverlay = document.querySelectorAll('.img-overlay');
+    const name = card.dataset.product;
+    let obj = {};
+
+    if (!allQuickShop[index].classList.value.includes('open-shop')) {
+      allQuickShop[index].classList.add('open-shop');
+      imgOverlay[index].classList.add('opaque-shop');
+      obj = { name, count: 0 };
+      getProduct(obj);
+    } else {
+      allQuickShop[index].classList.remove('open-shop');
+      imgOverlay[index].classList.remove('opaque-shop');
+      obj = {};
+      getProduct(obj);
+      this.removeAttrib(attributes);
+    }
+
+    allQuickShop.forEach((QuickShop) => {
+      if (QuickShop.classList.value.includes('open-shop') && allQuickShop[index] && !allQuickShop[index].contains(QuickShop)) {
+        QuickShop.classList.remove('open-shop');
+      }
+    });
+
+    imgOverlay.forEach((card) => {
+      if (card.classList.value.includes('opaque-shop') && imgOverlay[index] && !imgOverlay[index].contains(card)) {
+        card.classList.remove('opaque-shop');
+        this.removeAttrib(attributes);
+      }
+    });
+  }
+
+  AddToCart = (attributes, gallery, index, prices) => {
+    const {
+      myItem, addAttrib, updateCart, addToCart, allCart, getProduct,
+    } = this.props;
+
+    const allQuickShop = document.querySelectorAll('.quick-shop');
+    const imgOverlay = document.querySelectorAll('.img-overlay');
+    const showAllSuccess = document.querySelectorAll('.add-success-msg');
+    const showAllError = document.querySelectorAll('.add-error-msg');
+
+    const displayError = (showError) => {
+      if (!showError) {
+        showAllSuccess[index].classList.add('add-success');
+        showAllError[index].classList.remove('add-error');
+        allQuickShop[index].classList.remove('open-shop');
+        imgOverlay[index].classList.remove('opaque-shop');
+        const obj = {};
+        getProduct(obj);
+        this.removeAttrib(attributes);
+        setTimeout(() => {
+          showAllSuccess[index].classList.remove('add-success');
+        }, 3000);
+      } else {
+        showAllError[index].classList.add('add-error');
+        showAllSuccess[index].classList.remove('add-success');
+        setTimeout(() => {
+          showAllError[index].classList.remove('add-error');
+        }, 5000);
+      }
+    };
+
+    handleAddLogic(myItem, addAttrib, updateCart, addToCart, allCart, prices,
+      attributes, gallery, displayError);
   }
 
   render() {
@@ -37,18 +142,58 @@ class Category extends React.Component {
                   <h1 className="page-title" style={{ textTransform: 'capitalize' }}>{data.category.name}</h1>
                   <div className="d-flex row">
                     {data.category.products.map(({
-                      inStock, id, name, gallery, prices,
-                    }) => (
-                      <div className="d-flex card" key={id}>
+                      inStock, id, name, gallery, prices, attributes,
+                    }, index) => (
+                      <div data-product={name} className="d-flex card" key={id}>
                         <div className="d-flex card-container">
                           <div className="img-container">
                             <p className={`${inStock ? 'alert-off' : 'out-of-stock'}`}>out of stock</p>
-                            <div className={`${inStock ? '' : 'img-opacity'} 'category-image-contain'`} >
-                              <img src={gallery[0]} style={{ width: '100%', height: '300px', objectFit: 'contain' }} alt={id} />
-                              <img className="add-cart-logo" src={addCartLogo} alt="addCart" />
+                            <p className="add-error-msg">kindly select all attributes</p>
+                            <p className="add-success-msg">Added successfully</p>
+                            <div className="img-overlay" />
+                            <div className="quick-shop flex-direction-column">
+                              {attributes.map(({
+                                id, name, type, items,
+                              }) => (
+                                <div key={id}>
+                                  <p className="cart-attrib-name shop-attrib-name">{`${name} :`}</p>
+                                  <div className="d-flex details-attributes">
+                                    {
+                        items.map(({ id, displayValue }) => (
+                          <div key={id}>
+                            {
+                                type === 'swatch'
+                                  ? (
+                                    <div>
+                                      <div role="none" ref={this.MuiltRefFunc} data-id={displayValue} onMouseDown={(e) => this.selectSwatch(e, name, displayValue)} className={`swatch-container ${name.split(' ').join('')}`}>
+                                        <div className="swatch swatch-quickshop" style={{ backgroundColor: displayValue }} />
+                                      </div>
+                                    </div>
+                                  )
+                                  : (
+                                    <div>
+                                      <div role="none" ref={this.MuiltRefFunc} data-id={displayValue} onMouseDown={(e) => this.selectNotSwatch(e, name, displayValue)} className={`d-flex not-swatch not-swatch-quickshop ${name.split(' ').join('')}`}>
+                                        <p>{displayValue}</p>
+                                      </div>
+                                    </div>
+                                  )
+}
+                          </div>
+                        ))
+}
+                                  </div>
+                                </div>
+                              ))}
+                              <div className="button-contain">
+                                <button onClick={() => this.AddToCart(attributes, gallery, index, prices)} disabled={!inStock} className="details-button quick-shop-btn" type="button">ADD</button>
+                              </div>
+                            </div>
+                            <div className={`${inStock ? '' : 'img-opacity'} category-image-contain`}>
+                              <Link to={`/${categoryName}/${id}`}><img src={gallery[0]} style={{ width: '100%', height: '300px', objectFit: 'contain' }} alt={id} /></Link>
+                              <div role="none" onMouseDown={() => this.toggleQuickShop(index, attributes)} className="add-cart-logo"><img src={addCartLogo} alt="addCart" /></div>
                             </div>
                           </div>
-                          <Link to={`${inStock ? `/${categoryName}/${id}` : '#'}`}><p className={`${inStock ? 'enable-hover' : 'disabled'} card-name`}>{name}</p></Link>
+                          <Link to={`/${categoryName}/${id}`}><p className={`${inStock ? '' : 'disabled'} enable-hover card-name`}>{name}</p></Link>
                           {prices.filter(({ currency }) => currency.symbol === symbol)
                             .map(({ currency, amount }) => <p className={`${inStock ? '' : 'disabled'} card-name`} key={currency.symbol}>{`${currency.symbol} ${amount}`}</p>)}
                         </div>
@@ -67,18 +212,32 @@ class Category extends React.Component {
 
 const actionCreators = {
   fetchCategory,
+  addAttrib,
+  getProduct,
+  addToCart,
+  updateCart,
 };
 
 function mapStateToProps(state) {
   const CATEGORY_QUERY = state.categoryReducer;
+  const myItem = state.itemReducer;
+  const { allCart } = state;
   return {
     CATEGORY_QUERY,
+    myItem,
+    allCart,
   };
 }
 
 Category.propTypes = {
   CATEGORY_QUERY: PropTypes.instanceOf(Object).isRequired,
+  myItem: PropTypes.instanceOf(Object).isRequired,
+  allCart: PropTypes.instanceOf(Array).isRequired,
   fetchCategory: PropTypes.func.isRequired,
+  addAttrib: PropTypes.func.isRequired,
+  getProduct: PropTypes.func.isRequired,
+  addToCart: PropTypes.func.isRequired,
+  updateCart: PropTypes.func.isRequired,
   categoryName: PropTypes.string.isRequired,
   symbol: PropTypes.string.isRequired,
 };

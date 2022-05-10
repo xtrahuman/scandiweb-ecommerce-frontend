@@ -1,7 +1,6 @@
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 import { Query } from '@apollo/client/react/components';
-import { gql } from '@apollo/client';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Navbar from './component/Navbar';
@@ -11,8 +10,9 @@ import Cart from './component/cart';
 import MiniCart from './component/miniCart';
 import toggleMiniCart from './redux/display/action';
 import DeleteOverlay from './component/deleteOverlay';
+import { ALL_QUERY } from './redux/queries/queries';
 
-class App extends React.Component {
+class App extends React.PureComponent {
   constructor(props) {
     super(props);
     this.nav = JSON.parse(localStorage.getItem('current_category'));
@@ -23,31 +23,6 @@ class App extends React.Component {
       symbolWrap: '',
     };
 
-    this.ALL_QUERY = gql`
-  query AllQuery{
-    categories{
-    name,
-    products{
-      id,
-      name,
-      inStock,
-      gallery,
-      prices{
-        currency{
-         symbol,
-         label
-       },
-         amount
-       }
-    }
-  }
-
-  currencies{
-    label,
-    symbol
-  }
-}
-`;
     this.getNavName = this.getNavName.bind(this);
     this.closeMiniCart = this.closeMiniCart.bind(this);
   }
@@ -85,7 +60,7 @@ class App extends React.Component {
     } = this.state;
     const { miniCartActive } = this.props;
     return (
-      <Query query={this.ALL_QUERY}>
+      <Query query={ALL_QUERY}>
         {({ loading, error, data }) => {
           if (error) return <h1>Error...</h1>;
           if (loading || !data) return <h1>Loading...</h1>;
@@ -109,9 +84,9 @@ class App extends React.Component {
                       <Route path={`/${name}/:id`} element={<Details superData={data} categoryName={NavName} symbol={symbol} />} />
                     </Route>
                   ))}
-                  <Route path="/cart" element={<Cart />} />
+                  <Route path="/cart" element={<Cart symbol={symbol} />} />
                 </Routes>
-                <MiniCart iconElem={iconElem} symbolWrap={symbolWrap} cartDisplay={miniCartActive ? 'minicart-active' : ''} />
+                <MiniCart iconElem={iconElem} symbol={symbol} symbolWrap={symbolWrap} cartDisplay={miniCartActive ? 'minicart-active' : ''} />
               </div>
             </div>
           );

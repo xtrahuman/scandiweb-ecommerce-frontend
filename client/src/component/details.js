@@ -1,22 +1,22 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import Parser from 'html-react-parser';
 import {
-  Link,
   useLocation,
   useNavigate,
   useParams,
 } from 'react-router-dom';
 
-import { v4 as uuidv4 } from 'uuid';
 import { Query } from '@apollo/client/react/components';
 import { connect } from 'react-redux';
 import { selectImage } from '../redux/currentImage/currentImage';
-import { fetchProduct } from '../redux/details/query/action';
-import addAttrib, { getProduct } from '../redux/Item/action';
+import productDatafn, { fetchProduct } from '../redux/details/action';
+import addAttrib, {
+  getProduct, switchHandler, initialAttributesStyle, handleAddLogic,
+} from '../redux/Item/action';
 import updateCart, { addToCart } from '../redux/cart/addCart/action';
-import productDatafn from '../redux/details/data/action';
 
-class Details extends React.Component {
+class Details extends React.PureComponent {
   constructor(props) {
     super(props);
     this.getDetails = this.getDetails.bind(this);
@@ -32,7 +32,7 @@ class Details extends React.Component {
   componentDidMount() {
     const {
       productDatafn, superData, categoryName, router,
-      selectImage, getProduct, addAttrib, symbol,
+      selectImage, getProduct, addAttrib,
     } = this.props;
     const { params } = router;
     const { id } = params;
@@ -42,13 +42,12 @@ class Details extends React.Component {
     const { products } = currentCategory[0];
     const productDetails = products.filter(({ id }) => id === idParam);
     const { gallery, name, prices } = productDetails[0];
-    prices.filter(({ currency }) => currency.symbol === symbol)
-      .map(({ amount }) => getProduct({ name, count: 0, price: amount }));
+    getProduct({ name, count: 0 });
     productDatafn(prices);
     selectImage({ image: gallery[0] });
     this.clearInterval = setTimeout(() => {
-      this.initialAttributesStyle(addAttrib);
-    }, 800);
+      initialAttributesStyle(addAttrib, this.attribClass);
+    }, 1300);
 
     this.MuiltRefFunc = (el) => {
       if (el && !this.multiRef.current.includes(el)) {
@@ -62,32 +61,17 @@ class Details extends React.Component {
   }
 
       selectSwatch = (event, name, displayValue) => {
+        const { addAttrib } = this.props;
         const selected = event.currentTarget;
         const switchClass = 'active-swatch';
-        this.switchHandler(selected, switchClass, name, displayValue);
+        switchHandler(selected, switchClass, name, displayValue, addAttrib);
       }
 
       selectNotSwatch = (event, name, displayValue) => {
+        const { addAttrib } = this.props;
         const selected = event.currentTarget;
         const switchClass = 'Active-not-swatch';
-        this.switchHandler(selected, switchClass, name, displayValue);
-      }
-
-      switchHandler = (selected, switchClass, attrib, value) => {
-        const { addAttrib } = this.props;
-        const attribName = attrib.split(' ').join('');
-        const parentElement = document.querySelectorAll(`.${attribName}`);
-        parentElement.forEach((element) => {
-          element.classList.forEach((classes) => {
-            if (classes === switchClass) {
-              element.classList.remove(switchClass);
-            }
-          });
-        });
-        const obj = {};
-        obj[attribName] = value;
-        addAttrib(obj);
-        selected.classList.add(switchClass);
+        switchHandler(selected, switchClass, name, displayValue, addAttrib);
       }
 
       getDetails = (imageUrl) => {
@@ -95,71 +79,27 @@ class Details extends React.Component {
         selectImage({ image: imageUrl });
       }
 
-      initialAttributesStyle = (addAttrib) => {
-        this.attribClass?.forEach(({ name }) => {
-          const attribName = name.split(' ').join('');
-          const getAtribEl = document.querySelectorAll(`.${attribName}`)[0];
-          const value = getAtribEl.dataset.id;
-          getAtribEl.classList.forEach((classl) => (classl === 'not-swatch' ? getAtribEl.classList.add('Active-not-swatch') : getAtribEl.classList.add('active-swatch')));
-          const obj = {};
-          obj[attribName] = value;
-          addAttrib(obj);
-        });
-      }
-
-      compareObjects = (a, b) => {
-        const recurseCheck = (objt) => Object.entries(objt).sort().map((i) => {
-          if (i[1] instanceof Object) {
-            i[1] = recurseCheck(i[1]);
-          }
-          return i;
-        });
-        const newA = { ...a };
-        delete newA.count;
-        delete newA.total;
-        delete newA.cartId;
-        delete newA.galleries;
-        const newB = { ...b };
-        delete newB.count;
-        delete newB.total;
-        delete newB.cartId;
-        delete newB.galleries;
-        return JSON.stringify(recurseCheck(newA)) === JSON.stringify(recurseCheck(newB));
-      }
-
       AddToCart() {
         const {
           myItem, addAttrib, updateCart, addToCart, allCart,
         } = this.props;
-        const updatePrice = document.querySelector('#product');
-        const priceValue = updatePrice.dataset.id;
-        const obj = {};
-        obj.cartId = uuidv4();
-        obj.count = myItem.count;
-        obj.count += 1;
-        obj.total = obj.count * parseFloat(priceValue);
-        obj.attributes = this.attribClass;
-        obj.galleries = { gallery: [...this.galleries], currentGallery: this.galleries[0] };
-        addAttrib(obj);
-        const newObj = { ...myItem, ...obj };
-        const newCart = [newObj];
-        let counter = 0;
-        const updatedCart = allCart.map((oldObj) => {
-          if (this.compareObjects(oldObj, newObj)) {
-            oldObj.count += 1;
-            oldObj.total = oldObj.count * parseFloat(priceValue);
-            counter += 1;
+        const showAllSuccess = document.querySelector('.detail-add-success-msg');
+        const showAllError = document.querySelector('.detail-add-error-msg');
+        const displayError = (showError) => {
+          if (!showError) {
+            showAllSuccess.classList.add('add-success-detail');
+            setTimeout(() => {
+              showAllSuccess.classList.remove('add-success-detail');
+            }, 5000);
+          } else {
+            showAllError.classList.add('add-error-detail');
+            setTimeout(() => {
+              showAllError.classList.remove('add-error-detail');
+            }, 5000);
           }
-
-          return oldObj;
-        });
-
-        if (counter < 1) {
-          addToCart(newCart);
-          counter = 0;
-        } else {
-          updateCart(updatedCart);
-        }
+        };
+        handleAddLogic(myItem, addAttrib, updateCart, addToCart, allCart,
+          this.prices, this.attribClass, this.galleries, displayError);
       }
 
       render() {
@@ -178,12 +118,13 @@ class Details extends React.Component {
               if (loading || !data) return <h1>Loading...</h1>;
               const { product } = data;
               const {
-                name, gallery, prices, attributes,
+                name, inStock, gallery, prices, attributes,
               } = product;
               const element = product?.description;
               this.attribClass = attributes;
               this.galleries = gallery;
               this.prices = prices;
+              this.inStock = inStock;
 
               if (cartReducer === null) {
                 selectImage({ image: gallery[0] });
@@ -199,7 +140,10 @@ class Details extends React.Component {
                       ))}
                     </div>
                     <div className="details-image-main"><img alt={name} src={`${cartReducer ? cartReducer.image : gallery[0]}`} style={{ width: '100%', height: 'auto' }} /></div>
-                    <div className="details-contents" style={{}}>
+                    <div className="details-contents pos-success-error">
+                      <p className="detail-add-error-msg pos-bottom">kindly select all attributes</p>
+                      <p className={`${!inStock ? 'outStock-display-msg' : ''} outStock-error-msg pos-bottom`}>This item is out of stock</p>
+                      <p className="detail-add-success-msg pos-bottom">Added successfully</p>
                       <p className="details-product-name">{name}</p>
                       {attributes.map(({
                         id, name, type, items,
@@ -239,9 +183,13 @@ class Details extends React.Component {
                           .map(({ currency, amount }) => <p className="details-amount" id="product" data-id={amount} key={currency.symbol}>{`${currency.symbol} ${amount}`}</p>)}
                       </div>
                       <div className="button-contain">
-                        <Link to="/cart"><button onClick={this.AddToCart} disabled={false} className="details-button" type="button">ADD TO CART</button></Link>
+                        <button onClick={this.AddToCart} disabled={!inStock} className="details-button" type="button">ADD TO CART</button>
                       </div>
-                      <div className="descriptionBody" dangerouslySetInnerHTML={{ __html: element }} />
+                      <div className="descriptionBody">
+                        {
+                       Parser(element)
+                      }
+                      </div>
                     </div>
                   </div>
                 </div>
