@@ -134,8 +134,8 @@ class Details extends React.PureComponent {
                   <div className="container d-flex details-container">
                     <div className="d-flex flex-direction-column all-image">
                       {gallery.map((pictureUrl) => (
-                        <div role="none" key={pictureUrl} onMouseDown={() => this.getDetails(pictureUrl)}>
-                          <img alt={name} src={`${pictureUrl}`} style={{ width: '90px', height: 'auto' }} />
+                        <div role="none" key={pictureUrl} className="all-details-image" onMouseDown={() => this.getDetails(pictureUrl)}>
+                          <img alt={name} className="details-images-hover" src={`${pictureUrl}`} />
                         </div>
                       ))}
                     </div>

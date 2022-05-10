@@ -259,7 +259,7 @@ ul.currency li:hover {
   opacity: 40%;
 }
 
-.card:hover  .img-opacity {
+.card:hover .img-opacity {
   opacity: 100%;
 }
 
@@ -320,8 +320,10 @@ ul.currency li:hover {
   position: relative;
 }
 
-
-.detail-add-error-msg,.detail-add-success-msg,.add-error-msg,.add-success-msg {
+.detail-add-error-msg,
+.detail-add-success-msg,
+.add-error-msg,
+.add-success-msg {
   font-size: 12px;
   position: absolute;
   left: -50%;
@@ -333,7 +335,18 @@ ul.currency li:hover {
   z-index: 2;
 }
 
-.outStock-error-msg{
+.details-images-hover {
+  width: 90px;
+  height: auto;
+}
+
+.all-details-image:hover .details-images-hover {
+  cursor: pointer;
+  width: 95px;
+  height: auto;
+}
+
+.outStock-error-msg {
   position: absolute;
   left: -50%;
   transform: translateX(50%);
@@ -353,7 +366,8 @@ ul.currency li:hover {
   text-align: center;
 }
 
-.outStock-display-msg, .add-error-detail {
+.outStock-display-msg,
+.add-error-detail {
   color: #f44336;
   font-size: 14px;
   display: flex;
