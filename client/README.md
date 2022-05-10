@@ -1,5 +1,5 @@
 # Scandiweb React Project
-- This is an e-commerce react project built for scandiweb screening test. in this project, data was fetched using apollo-graphql
+- This is a minimalist storefront react project built for scandiweb screening test. in this project, the endpoint was fetched using apollo-graphql
 
 ## Project Preview
 
@@ -16,7 +16,6 @@
 - [CSS](https://www.w3schools.com/css/)
 - [JS](https://www.javascript.com/)
 
-# Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
@@ -26,15 +25,29 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
    ```sh
    git clone https://github.com/xtrahuman/Okpara-Tochukwu-react.git
    ```
-2. Install NPM packages
+2. Install NPM packages for Backend
    ```sh
    npm install
    ```
-3. Run server
+
+3. Run server for Backend 
    ```sh
    npm start
    ```
-## Authors
+4. open a different terminal and Navigate to client
+   ```sh
+   cd client
+   ```
+
+3. Install NPM packages for Front-end
+   ```sh
+   npm install
+   ```
+4. Run server for Front-end
+   ```sh
+   npm start
+   ```
+## Author
 
 👤 **Okpara Tochukwu**
 
