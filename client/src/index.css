@@ -410,6 +410,10 @@ ul.currency li:hover {
   transform: translateX(50%);
 }
 
+.details-out-of-stock {
+  font-size: 40px;
+}
+
 .quick-shop {
   position: absolute;
   bottom: 15%;
@@ -504,6 +508,7 @@ ul.currency li:hover {
 
 .details-image-main {
   width: 55%;
+  position: relative;
 }
 
 .details-contents {

@@ -145,10 +145,10 @@ class Cart extends React.PureComponent {
                                       </div>
                                     </div>
                                   )
-}
+                            }
                           </div>
                         ))
-}
+                            }
                           </div>
                         </div>
                       ))}
@@ -172,21 +172,15 @@ class Cart extends React.PureComponent {
                 ))}
                 <div className="d-flex flex-direction-column order-style cart-border">
                   <div>
-                    {' '}
                     <span className="cart-order-title">Tax :</span>
-                    {' '}
                     <span className="cart-order-value">{`${symbol} ${tax}`}</span>
                   </div>
                   <div>
-                    {' '}
                     <span className="cart-order-title">Qty :</span>
-                    {' '}
                     <span className="cart-order-value">{data ? Qty : ''}</span>
                   </div>
                   <div className="cart-total">
-                    {' '}
                     <span className="cart-order-title">Total :</span>
-                    {' '}
                     <span className="cart-order-value">{`${symbol} ${data ? (sum + tax).toFixed(2) : ''}`}</span>
                   </div>
                   <button disabled className="details-button order-btn" type="button">order</button>
