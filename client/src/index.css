@@ -406,7 +406,7 @@ ul.currency li:hover {
   top: 50%;
   left: -50%;
   z-index: 1;
-  transform: translateY(-50%);
+  transform: translateY(0%);
   transform: translateX(50%);
 }
 
@@ -509,7 +509,17 @@ ul.currency li:hover {
 .details-image-main {
   width: 55%;
   position: relative;
+  /* height: auto ; */
 }
+
+img.details-image {
+  width: 100%;
+  height: auto;
+  position: absolute;
+  top: 50%;
+  left: 0%;
+  transform: translateY(-50%);
+} 
 
 .details-contents {
   width: 40%;
