@@ -140,7 +140,7 @@ class Details extends React.PureComponent {
                       ))}
                     </div>
                     <div className="details-image-main">
-                      <img alt={name} src={`${cartReducer ? cartReducer.image : gallery[0]}`} style={{ width: '100%', height: 'auto' }} />
+                      <img alt={name} src={`${cartReducer ? cartReducer.image : gallery[0]}`} className="details-image" />
                       <p className={`${inStock ? 'alert-off' : 'out-of-stock'} details-out-of-stock`}>out of stock</p>
                     </div>
                     <div className="details-contents pos-success-error">
