@@ -8,6 +8,10 @@
 ![](./public/cart.PNG)                   |  ![](./public/category.PNG) 
 
 
+### deployed website
+
+- [Link](https://scandiweb-ecommerce.netlify.app/)
+
 
 ### Built With
 
@@ -25,28 +29,16 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
    ```sh
    git clone https://github.com/xtrahuman/Okpara-Tochukwu-react.git
    ```
-2. Install NPM packages for Backend
+2. Install NPM packages for Front-end
    ```sh
    npm install
    ```
 
-3. Run server for Backend 
+3. start application
    ```sh
    npm start
-   ```
-4. open a different terminal and Navigate to client
-   ```sh
-   cd client
    ```
 
-3. Install NPM packages for Front-end
-   ```sh
-   npm install
-   ```
-4. Run server for Front-end
-   ```sh
-   npm start
-   ```
 ## Author
 
 👤 **Okpara Tochukwu**
