@@ -10,7 +10,7 @@
 
 ### deployed website
 
-- [Link](https://scandiweb-ecommerce.netlify.app/)
+> click this [website Link](https://scandiweb-ecommerce.netlify.app/) 
 
 
 ### Built With
