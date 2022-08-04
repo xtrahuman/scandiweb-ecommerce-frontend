@@ -122,7 +122,7 @@ body.static {
 
 .details-main {
   height: 100vh;
-  padding-top: 40px;
+  margin-top: 40px;
 }
 
 .justify-content-c {
@@ -509,17 +509,14 @@ ul.currency li:hover {
 .details-image-main {
   width: 55%;
   position: relative;
-  /* height: auto ; */
 }
 
 img.details-image {
   width: 100%;
   height: auto;
   position: absolute;
-  top: 50%;
-  left: 0%;
-  transform: translateY(-50%);
-} 
+  left: 0;
+}
 
 .details-contents {
   width: 40%;
