@@ -12,7 +12,7 @@ import store from './redux/configureStore';
 import App from './App';
 
 const client = new ApolloClient({
-  uri: 'https://scandiweb-ecommerce-backend.herokuapp.com/',
+  uri: 'https://scandiweb-ecommerce-production.up.railway.app/',
   cache: new InMemoryCache(),
   defaultOptions: {
     watchQuery: {
